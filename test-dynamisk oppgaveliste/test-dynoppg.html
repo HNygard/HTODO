@@ -1,0 +1,186 @@
+<!doctype html>
+<html>
+  <head>
+    <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+
+    <script type="text/javascript">
+next_id = 3;
+$(document).ready(function()
+{
+	$(".task").keyup(TaskKeyup);
+	$(".task").keypress(TaskKeypress);
+	/*$(".task").keydown(function(e)
+	{
+		//$("#tester").text(e.keyCode);
+	});
+	*/
+});
+
+function TaskKeyup (e)
+{
+	if(e.keyCode == 13) // Enter is pressed
+	{
+		$("#tester").text("aight");
+		// Get next id from database
+		// TODO
+	
+		// Getting level
+		next_level = parseInt($('#task'+$(this).attr('id')+ ' .level').text());
+		
+		// Getting parent
+		parent_id = parseInt($('#task'+$(this).attr('id')+ ' .parent_id').text());
+	
+		// In with the new task
+		$('#task'+$(this).attr('id')).after('<tr id="task'+next_id+'"><td '+
+			'style="padding-left: '+(next_level*40)+'px;">'+
+			'<div class="level">'+next_level+'</div>'+
+			'<div class="id_display">'+next_id+'</div>' +
+			'<div class="parent_id">'+parent_id+'</div>' +
+			'<div '+
+				'id="'+next_id+'" '+
+				'class="task" '+
+				'contenteditable=""'+
+			'>Oppgave '+next_id+'</div></td></tr>');
+	
+		// TODO: bind keyup, keypress, etc to new task
+		$('#task'+next_id+' .task').keyup(TaskKeyup);
+		$('#task'+next_id+' .task').keypress(TaskKeypress);
+		next_id++;
+	}
+	else if (e.keyCode == 9) // Tab is pressed
+	{
+		// Debug:
+		$("#tester").text("tab, shift? "+e.shiftKey);
+		
+		// Current id
+		current_id = $(this).attr('id');
+		
+		// Finding level
+		next_level = parseInt($('#task'+current_id+ ' .level').text());
+		if(e.shiftKey)
+		{
+			if(next_level > 1) // 1 is the lowest level
+				next_level--;
+		}
+		else
+			next_level++;
+		
+		taskSetLevel(current_id, next_level);
+		// Finding parent
+		if(next_level > 1)
+		{
+			parent_id = 0;
+			hit_task = false;
+			$('#tasks td').each(function() {
+				if(hit_task)
+					return; // Already found result
+				
+				// Getting id
+				this_id = 0;
+				$.each($(this).children('.task'), function () {
+					this_id = $(this).attr('id');
+				});
+				
+				if(this_id == current_id)
+				{
+					// Last parent is parent
+					hit_task = true;
+					return;
+				}
+				
+				// Getting level
+				this_level = 0;
+				$.each($(this).children('.level'), function () {
+					this_level = parseInt($(this).text());
+				});
+				
+				if(this_level < next_level)
+				{
+					// Possible parent
+					$.each($(this).children('.task'), function () {
+						parent_id = parseInt($(this).attr('id'));
+					});
+				}
+				/*else if(this_level == next_level-1)
+				{
+					parent_id = 0;
+					console.log('Resetting parent');
+				}
+				else
+					console.log('None of the above');*/
+			});
+			
+			if(!hit_task || parent_id == 0)
+			{
+				parent_id_set = false;
+			}
+			else
+				parent_id_set = true;
+		}
+		else
+		{
+			parent_id = 0;
+			parent_id_set = true;
+		}
+		
+		if(parent_id != 0 || next_level == 1)
+		{
+			$('#task'+current_id+ ' td').css('padding-left', next_level*40+'px');
+			$('#task'+current_id+ ' .level').text(next_level);
+		}
+		if(parent_id_set)
+			$('#task'+current_id+ ' .parent_id').text(parent_id);
+	}
+	else
+	{
+		$("#tester").text(e.keyCode);
+	}
+}
+
+function TaskKeypress(e)
+{
+	if(e.keyCode == 13 || e.keyCode == 9) {
+		return false;
+	}
+}
+
+function taskSetLevel (task_id, level)
+{
+
+}
+    </script>
+<!--
+        // do something
+         // For example, you could place an AJAX call here:
+        $.ajax({
+          type: "POST",
+          url: "some.php",
+          data: "newfieldvalue=" + newValue,
+          success: function(msg){
+            alert( "Data Saved: " + msg );
+          }
+       });
+-->
+<style>
+td {
+ border: 1px solid black;
+}
+
+.level { background-color: lightblue; }
+.id_display { background-color: pink; }
+.parent_id { background-color: lightgreen; }
+.task { border: 1px solid black; margin: 5px; padding: 5px; width: 400px;}
+</style>
+  </head>
+  <body>
+<div id="tester"></div>
+<div class="level">Level</div>
+<div class="id_display">Id</div>
+<div class="parent_id">Parentid</div>
+<table id="tasks">
+	<tr id="task1"><td style="padding-left: 40px;"><div class="level">1</div><div class="id_display">1</div><div class="parent_id">0</div><div class="task" id="1" contenteditable="">Oppgave</div></td></tr>
+	<tr id="task2"><td style="padding-left: 40px;"><div class="level">1</div><div class="id_display">2</div><div class="parent_id">0</div><div class="task" id="2" contenteditable="">Oppgave 2</div></td></tr>
+</table>
+    <a href="http://jquery.com/">jQuery</a>
+  </body>
+</html>
