@@ -66,70 +66,6 @@ function TaskKeyup (e)
 			next_level++;
 		
 		taskSetLevel(current_id, next_level);
-		// Finding parent
-		if(next_level > 1)
-		{
-			parent_id = 0;
-			hit_task = false;
-			$('#tasks td').each(function() {
-				if(hit_task)
-					return; // Already found result
-				
-				// Getting id
-				this_id = 0;
-				$.each($(this).children('.task'), function () {
-					this_id = $(this).attr('id');
-				});
-				
-				if(this_id == current_id)
-				{
-					// Last parent is parent
-					hit_task = true;
-					return;
-				}
-				
-				// Getting level
-				this_level = 0;
-				$.each($(this).children('.level'), function () {
-					this_level = parseInt($(this).text());
-				});
-				
-				if(this_level < next_level)
-				{
-					// Possible parent
-					$.each($(this).children('.task'), function () {
-						parent_id = parseInt($(this).attr('id'));
-					});
-				}
-				/*else if(this_level == next_level-1)
-				{
-					parent_id = 0;
-					console.log('Resetting parent');
-				}
-				else
-					console.log('None of the above');*/
-			});
-			
-			if(!hit_task || parent_id == 0)
-			{
-				parent_id_set = false;
-			}
-			else
-				parent_id_set = true;
-		}
-		else
-		{
-			parent_id = 0;
-			parent_id_set = true;
-		}
-		
-		if(parent_id != 0 || next_level == 1)
-		{
-			$('#task'+current_id+ ' td').css('padding-left', next_level*40+'px');
-			$('#task'+current_id+ ' .level').text(next_level);
-		}
-		if(parent_id_set)
-			$('#task'+current_id+ ' .parent_id').text(parent_id);
 	}
 	else
 	{
@@ -144,9 +80,72 @@ function TaskKeypress(e)
 	}
 }
 
-function taskSetLevel (task_id, level)
+function taskSetLevel (task_id, task_level)
 {
+	// Finding parent
+	if(task_level > 1)
+	{
+		parent_id = 0;
+		hit_task = false;
+		$('#tasks td').each(function() {
+			if(hit_task)
+				return; // Already found result
+		
+			// Getting id
+			this_id = 0;
+			$.each($(this).children('.task'), function () {
+				this_id = $(this).attr('id');
+			});
+		
+			if(this_id == task_id)
+			{
+				// Last parent is parent
+				hit_task = true;
+				return;
+			}
+		
+			// Getting level
+			this_level = 0;
+			$.each($(this).children('.level'), function () {
+				this_level = parseInt($(this).text());
+			});
+		
+			if(this_level < task_level)
+			{
+				// Possible parent
+				$.each($(this).children('.task'), function () {
+					parent_id = parseInt($(this).attr('id'));
+				});
+			}
+			/*else if(this_level == task_level-1)
+			{
+				parent_id = 0;
+				console.log('Resetting parent');
+			}
+			else
+				console.log('None of the above');*/
+		});
+	
+		if(!hit_task || parent_id == 0)
+		{
+			parent_id_set = false;
+		}
+		else
+			parent_id_set = true;
+	}
+	else
+	{
+		parent_id = 0;
+		parent_id_set = true;
+	}
 
+	if(parent_id != 0 || task_level == 1)
+	{
+		$('#task'+task_id+ ' td').css('padding-left', task_level*40+'px');
+		$('#task'+task_id+ ' .level').text(task_level);
+	}
+	if(parent_id_set)
+		$('#task'+task_id+ ' .parent_id').text(parent_id);
 }
     </script>
 <!--
