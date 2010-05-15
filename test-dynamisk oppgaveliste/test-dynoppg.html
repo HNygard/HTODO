@@ -85,6 +85,8 @@ function taskSetLevel (task_id, task_level)
 	// Finding parent
 	if(task_level > 1)
 	{
+		// Need a parent since we are not on level 1
+		
 		parent_id = 0;
 		hit_task = false;
 		$('#tasks td').each(function() {
@@ -135,6 +137,7 @@ function taskSetLevel (task_id, task_level)
 	}
 	else
 	{
+		// No parent needed, we are on level 1
 		parent_id = 0;
 		parent_id_set = true;
 	}
