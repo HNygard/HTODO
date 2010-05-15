@@ -82,6 +82,11 @@ function TaskKeypress(e)
 
 function taskSetLevel (task_id, task_level)
 {
+	last_parent_id = 0;
+	$('#task'+task_id+' .parent_id').each(function () {
+		last_parent_id = parseInt($(this).text());
+	});
+	
 	// Finding parent
 	if(task_level > 1)
 	{
@@ -89,15 +94,34 @@ function taskSetLevel (task_id, task_level)
 		
 		parent_id = 0;
 		hit_task = false;
-		$('#tasks td').each(function() {
-			if(hit_task)
-				return; // Already found result
+		task_children = new Array(); // Saving all children of our task
 		
+		// Running through all tasks
+		$('#tasks td').each(function()
+		{
+			
 			// Getting id
 			this_id = 0;
 			$.each($(this).children('.task'), function () {
 				this_id = $(this).attr('id');
 			});
+			if(this_id == 0)
+				return; // Error
+			
+			// Checking if this is a children of our task
+			$(this).children('.parent_id').each(function () {
+				this_parent_id = parseInt($(this).text());
+				if(
+					this_parent_id == task_id
+				)
+				{
+					// Children of task_id
+					task_children[task_children.length] = this_id;
+				}
+			});
+			
+			if(hit_task)
+				return; // Already found result, no need to go further
 		
 			if(this_id == task_id)
 			{
@@ -148,7 +172,105 @@ function taskSetLevel (task_id, task_level)
 		$('#task'+task_id+ ' .level').text(task_level);
 	}
 	if(parent_id_set)
+	{
 		$('#task'+task_id+ ' .parent_id').text(parent_id);
+		
+		// Also check all children
+		for(i = 0; i < task_children.length; i++)
+		{
+			taskCheckParent(task_children[i]);
+		}
+		// Also check all children of our last parent
+		$('#tasks td').each(function()
+		{
+			
+			// Getting id
+			this_id = 0;
+			$.each($(this).children('.task'), function () {
+				this_id = $(this).attr('id');
+			});
+			if(this_id == 0)
+				return; // Error
+			
+			// Checking if this is a children of our task
+			$(this).children('.parent_id').each(function () {
+				this_parent_id = parseInt($(this).text());
+				if (
+					this_parent_id == last_parent_id &&
+					this_id != task_id
+				   )
+				{
+					taskCheckParent(this_id);
+				}
+			});
+		});
+	}
+}
+
+function taskCheckParent(task_id)
+{
+	// Checking the parent_id
+
+	// Getting level
+	task_level = 0;
+	$.each($('#task'+task_id + ' .level'), function () {
+		task_level = parseInt($(this).text());
+	});
+	console.log('Level of child: ' + task_level);
+	
+	parent_id = 0;
+	hit_task = false;
+	task_children = new Array(); // Saving all children of our task
+
+	// Running through all tasks
+	$('#tasks td').each(function()
+	{
+	
+		// Getting id
+		this_id = 0;
+		$.each($(this).children('.task'), function () {
+			this_id = $(this).attr('id');
+		});
+		if(this_id == 0)
+			return; // Error
+		
+		if(hit_task)
+			return; // Already found result, no need to go further
+		
+		if(this_id == task_id)
+		{
+			// Last parent is parent
+			hit_task = true;
+			return;
+		}
+		
+		// Getting level
+		this_level = 0;
+		$.each($(this).children('.level'), function () {
+			this_level = parseInt($(this).text());
+		});
+		
+		if(this_level < task_level)
+		{
+			// Possible parent
+			$.each($(this).children('.task'), function () {
+				parent_id = parseInt($(this).attr('id'));
+			});
+		}
+	});
+
+	if(!hit_task || parent_id == 0)
+	{
+		parent_id_set = false;
+	}
+	else
+		parent_id_set = true;
+	
+	if(parent_id_set)
+	{
+		$('#task'+task_id+ ' .parent_id').text(parent_id);
+		// TODO: database
+	}
 }
     </script>
 <!--
