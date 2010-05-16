@@ -37,6 +37,7 @@ function TaskKeyup (e)
 			'<div class="id_display">'+next_id+'</div>' +
 			'<div class="parent_id">'+parent_id+'</div>' +
 			'<div '+
+				// TODO: Change ID to something else
 				'id="'+next_id+'" '+
 				'class="task" '+
 				'contenteditable=""'+
@@ -68,6 +69,7 @@ function TaskKeyup (e)
 		
 		taskSetLevel(current_id, next_level);
 	}
+	// TODO: pil opp og pil ned skal selecte oppgaven over eller nedenfor
 	else
 	{
 		$("#tester").text(e.keyCode);
