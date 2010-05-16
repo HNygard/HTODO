@@ -2,6 +2,7 @@
 <html>
   <head>
     <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="jquery-ui-1.8.1.custom.min.js"></script>
 
     <script type="text/javascript">
 next_id = 3;
@@ -31,8 +32,9 @@ function TaskKeyup (e)
 		parent_id = parseInt($('#task'+$(this).attr('id')+ ' .parent_id').text());
 	
 		// In with the new task
-		$('#task'+$(this).attr('id')).after('<tr id="task'+next_id+'"><td '+
-			'style="padding-left: '+(next_level*40)+'px;">'+
+		$('#task'+$(this).attr('id')).after('<li id="task'+next_id+'" '+
+			'style="margin-left: '+(next_level*40)+'px;">'+
+			'<div class="sorter">SORT</div>'+
 			'<div class="level">'+next_level+'</div>'+
 			'<div class="id_display">'+next_id+'</div>' +
 			'<div class="parent_id">'+parent_id+'</div>' +
@@ -41,7 +43,7 @@ function TaskKeyup (e)
 				'id="'+next_id+'" '+
 				'class="task" '+
 				'contenteditable=""'+
-			'>Oppgave '+next_id+'</div></td></tr>');
+			'>Oppgave '+next_id+'</div></li>');
 		// TODO: database
 		
 		$('#task'+next_id+' .task').keyup(TaskKeyup);
@@ -100,7 +102,7 @@ function taskSetLevel (task_id, task_level)
 		task_children = new Array(); // Saving all children of our task
 		
 		// Running through all tasks
-		$('#tasks td').each(function()
+		$('#tasks li').each(function()
 		{
 			
 			// Getting id
@@ -171,7 +173,7 @@ function taskSetLevel (task_id, task_level)
 
 	if(parent_id != 0 || task_level == 1)
 	{
-		$('#task'+task_id+ ' td').css('padding-left', task_level*40+'px');
+		$('#task'+task_id).css('margin-left', task_level*40+'px');
 		$('#task'+task_id+ ' .level').text(task_level);
 	}
 	if(parent_id_set)
@@ -185,7 +187,7 @@ function taskSetLevel (task_id, task_level)
 			taskCheckParent(task_children[i]);
 		}
 		// Also check all children of our last parent
-		$('#tasks td').each(function()
+		$('#tasks li').each(function()
 		{
 			
 			// Getting id
@@ -226,7 +228,7 @@ function taskCheckParent(task_id)
 	task_children = new Array(); // Saving all children of our task
 
 	// Running through all tasks
-	$('#tasks td').each(function()
+	$('#tasks li').each(function()
 	{
 	
 		// Getting id
@@ -289,7 +291,7 @@ function taskCheckParent(task_id)
        });
 -->
 <style>
-td {
+li {
  border: 1px solid black;
 }
 
@@ -298,20 +300,73 @@ td {
 	background-color: lightblue;
 	display: none;
 }
-.id_display { background-color: pink; }
-.parent_id { background-color: lightgreen; }
+.id_display
+{
+	background-color: pink;
+	width: 40px;
+	float: right;
+}
+.parent_id
+{
+	background-color: lightgreen;
+	width: 40px;
+	float: right;
+}
 .task { border: 1px solid black; margin: 5px; padding: 5px; width: 400px;}
 </style>
+<style type="text/css">
+#tasks
+{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	width: 60%;
+}
+#tasks li
+{
+	margin: 0 5px 5px 5px;
+	padding: 5px;
+	font-size: 1.2em;
+	height: 5em;
+}
+html>body #tasks li
+{
+	height: 5em;
+	line-height: 1.2em;
+}
+.ui-state-highlight
+{
+	height: 5em;
+	line-height: 1.2em;
+}
+.sorter
+{
+	//position: absolute;
+	left: 20px;
+	z-index: -1;
+}
+</style>
+<script type="text/javascript">
+$(function() {
+	$("#tasks").sortable({
+		placeholder: 'ui-state-highlight',
+		distance: 10,
+		handle: 'div.sorter'
+	});
+	//$("#tasks").disableSelection();
+});
+</script>
+
   </head>
   <body>
 <div id="tester"></div>
 <div class="level">Level</div>
 <div class="id_display">Id</div>
 <div class="parent_id">Parentid</div>
-<table id="tasks">
-	<tr id="task1"><td style="padding-left: 40px;"><div class="level">1</div><div class="id_display">1</div><div class="parent_id">0</div><div class="task" id="1" contenteditable="">Oppgave</div></td></tr>
-	<tr id="task2"><td style="padding-left: 40px;"><div class="level">1</div><div class="id_display">2</div><div class="parent_id">0</div><div class="task" id="2" contenteditable="">Oppgave 2</div></td></tr>
-</table>
+<ul id="tasks">
+	<li id="task1" style="margin-left: 40px;"><div class="sorter">SORT</div><div class="level">1</div><div class="id_display">1</div><div class="parent_id">0</div><div class="task" id="1" contenteditable="">Oppgave</div></li>
+	<li id="task2" style="margin-left: 40px;"><div class="sorter">SORT</div><div class="level">1</div><div class="id_display">2</div><div class="parent_id">0</div><div class="task" id="2" contenteditable="">Oppgave 2</div></li>
+</ul>
     <a href="http://jquery.com/">jQuery</a>
   </body>
 </html>
