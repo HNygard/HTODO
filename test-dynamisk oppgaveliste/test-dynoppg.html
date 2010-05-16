@@ -102,21 +102,19 @@ function taskSetLevel (task_id, task_level)
 
 function updateTask ()
 {
-	position = 0;
 	last_level = -1;
 	
 	levels = new Array();
 	levels_parent = new Array();
+	positions = new Array();
 	
 	levels[0] = 1;
 	levels_parent[0] = 0;
+	positions[0] = 0;
 	
 	// Running through all tasks
 	$('#tasks li').each(function()
 	{
-		position++;
-		$(this).children('.position').text(position);
-		
 		// Getting id
 		this_id = 0;
 		$.each($(this).children('.task'), function () {
@@ -130,10 +128,11 @@ function updateTask ()
 		$.each($(this).children('.level'), function () {
 			this_level = parseInt($(this).text());
 		});
-		while(levels.length > 0 && levels[levels.length-1] > this_level-1)
+		while(levels.length > 1 && levels[levels.length-1] > this_level-1)
 		{
 			levels.length--;
 			levels_parent.length--;
+			positions.length--;
 		}
 		
 		// Is parent changed?
@@ -145,12 +144,26 @@ function updateTask ()
 		{
 			$('#task'+this_id+ ' .parent_id').text(levels_parent[levels_parent.length-1]);
 			// TODO: database
+			console.log('Task ' + this_id + ', parent_id: ' + levels_parent[levels_parent.length-1]);
+		}
+		
+		// Is position changed?
+		positions[levels.length-1]++;
+		this_position = 0;
+		$.each($(this).children('.position'), function () {
+			this_position = parseInt($(this).text());
+		});
+		if(this_position != positions[levels.length-1])
+		{
+			$(this).children('.position').text(positions[levels.length-1]);
+			// TODO: database
+			console.log('Task ' + this_id + ', position: ' + positions[levels.length-1]);
 		}
 		
 		// Setting parent for further use
-		levels[levels.length]         = this_level;
 		levels_parent[levels.length]  = this_id;
-		
+		positions[levels.length]      = 0;
+		levels[levels.length]         = this_level;
 	});
 }
     </script>
