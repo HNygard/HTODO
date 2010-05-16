@@ -38,6 +38,7 @@ function TaskKeyup (e)
 			'<div class="level">'+next_level+'</div>'+
 			'<div class="id_display">'+next_id+'</div>' +
 			'<div class="parent_id">'+parent_id+'</div>' +
+			'<div class="position">0</div>' +
 			'<div '+
 				// TODO: Change ID to something else
 				'id="'+next_id+'" '+
@@ -49,6 +50,7 @@ function TaskKeyup (e)
 		$('#task'+next_id+' .task').keyup(TaskKeyup);
 		$('#task'+next_id+' .task').keypress(TaskKeypress);
 		$('#'+next_id).focus();
+		updateTaskPosition ();
 		next_id++;
 	}
 	else if (e.keyCode == 9) // Tab is pressed
@@ -277,6 +279,27 @@ function taskCheckParent(task_id)
 		// TODO: database
 	}
 }
+
+function updateTaskPosition ()
+{
+	position = 0;
+	
+	// Running through all tasks
+	$('#tasks li').each(function()
+	{
+		position++;
+		$(this).children('.position').text(position);
+		
+		// Getting id
+		this_id = 0;
+		$.each($(this).children('.task'), function () {
+			this_id = $(this).attr('id');
+		});
+		if(this_id == 0)
+			return; // Error
+		taskCheckParent(this_id);
+	});
+}
     </script>
 <!--
         // do something
@@ -303,13 +326,19 @@ li {
 .id_display
 {
 	background-color: pink;
-	width: 40px;
+	width: 70px;
 	float: right;
 }
 .parent_id
 {
 	background-color: lightgreen;
-	width: 40px;
+	width: 70px;
+	float: right;
+}
+.position
+{
+	background-color: yellow;
+	width: 70px;
 	float: right;
 }
 .task { border: 1px solid black; margin: 5px; padding: 5px; width: 400px;}
@@ -355,7 +384,10 @@ $(function() {
 	$("#tasks").sortable({
 		placeholder: 'ui-state-highlight',
 		distance: 10,
-		handle: 'div.sorter'
+		handle: 'div.sorter',
+		update: function() {
+			updateTaskPosition ();
+		}
 	});
 	//$("#tasks").disableSelection();
 });
@@ -367,9 +399,10 @@ $(function() {
 <div class="level">Level</div>
 <div class="id_display">Id</div>
 <div class="parent_id">Parentid</div>
+<div class="position">Posisjon</div>
 <ul id="tasks">
-	<li id="task1" style="margin-left: 40px;"><div class="sorter">SORT</div><div class="level">1</div><div class="id_display">1</div><div class="parent_id">0</div><div class="task" id="1" contenteditable="">Oppgave</div></li>
-	<li id="task2" style="margin-left: 40px;"><div class="sorter">SORT</div><div class="level">1</div><div class="id_display">2</div><div class="parent_id">0</div><div class="task" id="2" contenteditable="">Oppgave 2</div></li>
+	<li id="task1" style="margin-left: 40px;"><div class="sorter">SORT</div><div class="level">1</div><div class="id_display">1</div><div class="parent_id">0</div><div class="position">1</div><div class="task" id="1" contenteditable="">Oppgave</div></li>
+	<li id="task2" style="margin-left: 40px;"><div class="sorter">SORT</div><div class="level">1</div><div class="id_display">2</div><div class="parent_id">0</div><div class="position">2</div><div class="task" id="2" contenteditable="">Oppgave 2</div></li>
 </ul>
     <a href="http://jquery.com/">jQuery</a>
   </body>
