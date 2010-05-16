@@ -21,16 +21,18 @@ function TaskKeyup (e)
 {
 	if(e.keyCode == 13) // Enter is pressed
 	{
-		$("#tester").text("aight");
-		// Get next id from database
-		// TODO: database
-	
 		// Getting level
 		next_level = parseInt($('#task'+$(this).attr('id')+ ' .level').text());
 		
 		// Getting parent
 		parent_id = parseInt($('#task'+$(this).attr('id')+ ' .parent_id').text());
-	
+		
+		// Getting position
+		position = parseInt($('#task'+$(this).attr('id')+ ' .position').text()) + 1;
+		
+		// Creating task in database and getting id 
+		// TODO: database
+		
 		// In with the new task
 		$('#task'+$(this).attr('id')).after('<li id="task'+next_id+'" '+
 			'style="margin-left: '+(next_level*40)+'px;">'+
@@ -38,14 +40,13 @@ function TaskKeyup (e)
 			'<div class="level">'+next_level+'</div>'+
 			'<div class="id_display">'+next_id+'</div>' +
 			'<div class="parent_id">'+parent_id+'</div>' +
-			'<div class="position"></div>' +
+			'<div class="position">'+position+'</div>' +
 			'<div '+
 				// TODO: Change ID to something else
 				'id="'+next_id+'" '+
 				'class="task" '+
 				'contenteditable=""'+
 			'>Oppgave '+next_id+'</div></li>');
-		// TODO: database
 		
 		$('#task'+next_id+' .task').keyup(TaskKeyup);
 		$('#task'+next_id+' .task').keypress(TaskKeypress);
@@ -56,9 +57,6 @@ function TaskKeyup (e)
 	}
 	else if (e.keyCode == 9) // Tab is pressed
 	{
-		// Debug:
-		$("#tester").text("tab, shift? "+e.shiftKey);
-		
 		// Current id
 		current_id = $(this).attr('id');
 		
