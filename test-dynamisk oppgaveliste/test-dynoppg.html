@@ -42,10 +42,10 @@ function TaskKeyup (e)
 				'contenteditable=""'+
 			'>Oppgave '+next_id+'</div></td></tr>');
 		// TODO: database
-	
-		// TODO: bind keyup, keypress, etc to new task
+		
 		$('#task'+next_id+' .task').keyup(TaskKeyup);
 		$('#task'+next_id+' .task').keypress(TaskKeypress);
+		$('#'+next_id).focus();
 		next_id++;
 	}
 	else if (e.keyCode == 9) // Tab is pressed
