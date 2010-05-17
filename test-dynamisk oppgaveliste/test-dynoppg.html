@@ -50,7 +50,7 @@ function TaskKeyup (e)
 		
 		$('#task'+next_id+' .task').keyup(TaskKeyup);
 		$('#task'+next_id+' .task').keypress(TaskKeypress);
-		$('#'+next_id).focus();
+		$('#'+next_id).focus(); // TODO: change id for task edit field
 		
 		updateTask ();
 		next_id++;
@@ -72,7 +72,53 @@ function TaskKeyup (e)
 		
 		taskSetLevel(current_id, next_level);
 	}
-	// TODO: pil opp og pil ned skal selecte oppgaven over eller nedenfor
+	else if (e.keyCode == 38 || e.keyCode == 40) // Up or down
+	{
+		found_focus = false;
+		next = false;
+		last_id = 0;
+		
+		// Find current id
+		current_id = parseInt($(this).attr('id'));
+		
+		$('#tasks li').each(function()
+		{
+			if(found_focus)
+				return;
+			
+			// Finding id for this task
+			this_id = 0;
+			$.each($(this).children('.task'), function () {
+				this_id = $(this).attr('id');
+			});
+			if(this_id == 0)
+				return; // Error
+			
+			if(next)
+			{
+				found_focus = true;
+				$('#'+this_id).focus(); // TODO: change id for task edit field
+			}
+			
+			if(e.keyCode == 38) // Up
+			{
+				if(this_id == current_id)
+				{
+					found_focus = true;
+					$('#'+last_id).focus(); // TODO: change id for task edit field
+				}
+			}
+			else // Down
+			{
+				if(this_id == current_id)
+				{
+					next = true;
+				}
+			}
+			
+			last_id = this_id;
+		});
+	}
 	else
 	{
 		$("#tester").text(e.keyCode);
