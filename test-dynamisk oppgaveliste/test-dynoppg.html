@@ -10,12 +10,92 @@ $(document).ready(function()
 {
 	$(".task").keyup(TaskKeyup);
 	$(".task").keypress(TaskKeypress);
+	
+	// Debug / temp
+	$("#dbdebug").click(function () {
+		executeDBQueries();
+	});
 });
+
+tmp_new_task = new Array();
+db_is_running = false;
+db_run_again = false;
+database_queries = new Array();
+function addDBQuery (query)
+{
+	database_queries[database_queries.length] = query;
+	
+	// Debug:
+	//console.log(database_queries);
+	// TODO: remove
+	text = "";
+	for(i = 0; i < database_queries.length; i++)
+	{
+		text += database_queries[i] + '<br>';
+	}
+	$('#dbdebug').text("").append(text);
+}
+
+function executeDBQueries (run_after)
+{
+	if(db_is_running)
+	{
+		// Run another one right afterwards
+		db_run_again = true;
+	}
+	else
+	{
+		queryRunStatus(true);
+		db_run_after = run_after;
+		tmp_arr = new Array();
+		for(i=0; i < database_queries.length; i++)
+		{
+			tmp_arr = 0;
+		}
+		$.ajax({
+			type: "POST",
+			url: "test-dynoppg-phpbackend.php",
+			data: {queries: database_queries}, // TODO: values
+			success: afterDBQueries,
+			// TODO:
+			// error: function
+		});
+		database_queries = new Array(); // TODO: dont remove until success
+		
+		// Debug:
+		$('#dbdebug').text('');
+	}
+}
+
+function afterDBQueries (msg)
+{
+	queryRunStatus(false);
+	alert( "Data Saved: \n" + msg );
+	
+	db_run_after(msg);
+	
+	if(db_run_again)
+	{
+		executeDBQueries(function () { });
+	}
+}
+
+function queryRunStatus(is_running)
+{
+	db_is_running = is_running;
+	alert("Query_is_running: " + db_is_running);
+}
 
 function TaskKeyup (e)
 {
 	if(e.keyCode == 13) // Enter is pressed
 	{
+		if(db_is_running)
+		{
+			alert('Database is working. Please wait.');
+			return;
+		}
+		
 		// Getting level
 		next_level = parseInt($('#task'+$(this).attr('id')+ ' .level').text());
 		
@@ -25,30 +105,41 @@ function TaskKeyup (e)
 		// Getting position
 		position = parseInt($('#task'+$(this).attr('id')+ ' .position').text()) + 1;
 		
-		// Creating task in database and getting id 
-		// TODO: database
+		// Creating task in database and getting id
+		addDBQuery('create,parent:'+parent_id+',position:'+position);
 		
-		// In with the new task
-		$('#task'+$(this).attr('id')).after('<li id="task'+next_id+'" '+
-			'style="margin-left: '+(next_level*40)+'px;">'+
-			'<div class="sorter">SORT</div>'+
-			'<div class="level">'+next_level+'</div>'+
-			'<div class="id_display">'+next_id+'</div>' +
-			'<div class="parent_id">'+parent_id+'</div>' +
-			'<div class="position">'+position+'</div>' +
-			'<div '+
-				// TODO: Change ID to something else
-				'id="'+next_id+'" '+
-				'class="task" '+
-				'contenteditable=""'+
-			'>Oppgave '+next_id+'</div></li>');
+		executeDBQueries(function (msg)
+		{
+			// TODO: make reader for php output
+			new_id = next_id; // tmp
+			new_parent_id = next_id-1;
+			next_id++; // tmp
+			new_position = 0;
+			
+			// Locate level
+			new_level = parseInt($('#task'+new_parent_id+' .level')) + 1;
+			
+			// In with the new task
+			$('#task'+new_parent_id).after('<li id="task'+new_id+'" '+
+				'style="margin-left: '+(new_level*40)+'px;">'+
+				'<div class="sorter">SORT</div>'+
+				'<div class="level">'+new_level+'</div>'+
+				'<div class="id_display">'+new_id+'</div>' +
+				'<div class="parent_id">'+new_parent_id+'</div>' +
+				'<div class="position">'+new_position+'</div>' +
+				'<div '+
+					// TODO: Change ID to something else
+					'id="'+new_id+'" '+
+					'class="task" '+
+					'contenteditable=""'+
+				'>Oppgave '+new_id+'</div></li>');
 		
-		$('#task'+next_id+' .task').keyup(TaskKeyup);
-		$('#task'+next_id+' .task').keypress(TaskKeypress);
-		$('#'+next_id).focus(); // TODO: change id for task edit field
+			$('#task'+new_id+' .task').keyup(TaskKeyup);
+			$('#task'+new_id+' .task').keypress(TaskKeypress);
+			$('#'+new_id).focus(); // TODO: change id for task edit field
 		
-		updateTask ();
-		next_id++;
+			updateTask ();
+		});
 	}
 	else if (e.keyCode == 9) // Tab is pressed
 	{
@@ -182,8 +273,7 @@ function updateTask ()
 		if(this_parent_id != levels_parent[levels_parent.length-1])
 		{
 			$('#task'+this_id+ ' .parent_id').text(levels_parent[levels_parent.length-1]);
-			// TODO: database
-			console.log('Task ' + this_id + ', parent_id: ' + levels_parent[levels_parent.length-1]);
+			addDBQuery('update,id:'+this_id+',parent:'+levels_parent[levels_parent.length-1]);
 		}
 		
 		// Is position changed?
@@ -195,8 +285,7 @@ function updateTask ()
 		if(this_position != positions[levels.length-1])
 		{
 			$(this).children('.position').text(positions[levels.length-1]);
-			// TODO: database
-			console.log('Task ' + this_id + ', position: ' + positions[levels.length-1]);
+			addDBQuery('update,id:'+this_id+',position:'+positions[levels.length-1]);
 		}
 		
 		// Setting parent for further use
@@ -205,19 +294,9 @@ function updateTask ()
 		levels[levels.length]         = this_level;
 	});
 }
-    </script>
-<!--
-        // do something
-         // For example, you could place an AJAX call here:
-        $.ajax({
-          type: "POST",
-          url: "some.php",
-          data: "newfieldvalue=" + newValue,
-          success: function(msg){
-            alert( "Data Saved: " + msg );
-          }
-       });
--->
+
+</script>
+
 <style>
 li {
  border: 1px solid black;
@@ -309,6 +388,7 @@ $(function() {
 	<li id="task1" style="margin-left: 40px;"><div class="sorter">SORT</div><div class="level">1</div><div class="id_display">1</div><div class="parent_id">0</div><div class="position">1</div><div class="task" id="1" contenteditable="">Oppgave</div></li>
 	<li id="task2" style="margin-left: 40px;"><div class="sorter">SORT</div><div class="level">1</div><div class="id_display">2</div><div class="parent_id">0</div><div class="position">2</div><div class="task" id="2" contenteditable="">Oppgave 2</div></li>
 </ul>
-    <a href="http://jquery.com/">jQuery</a>
-  </body>
+
+<div id="dbdebug"></div>
+</body>
 </html>
