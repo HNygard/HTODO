@@ -52,9 +52,9 @@ foreach($_POST['queries'] as $line)
 			$position = 0;
 		echo
 			'created,'. // status
-			time().','. // id
-			$parent.','. // parent
-			$position; // position
+			'id:'.time().','. // id
+			'parent:'.$parent.','. // parent
+			'position:'.$position; // position
 	}
 	elseif($split[0] == 'update')
 	{

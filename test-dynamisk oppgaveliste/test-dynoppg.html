@@ -110,35 +110,88 @@ function TaskKeyup (e)
 		
 		executeDBQueries(function (msg)
 		{
-			// TODO: make reader for php output
-			new_id = next_id; // tmp
-			new_parent_id = next_id-1;
-			next_id++; // tmp
-			new_position = 0;
-			
-			// Locate level
-			new_level = parseInt($('#task'+new_parent_id+' .level')) + 1;
-			
-			// In with the new task
-			$('#task'+new_parent_id).after('<li id="task'+new_id+'" '+
-				'style="margin-left: '+(new_level*40)+'px;">'+
-				'<div class="sorter">SORT</div>'+
-				'<div class="level">'+new_level+'</div>'+
-				'<div class="id_display">'+new_id+'</div>' +
-				'<div class="parent_id">'+new_parent_id+'</div>' +
-				'<div class="position">'+new_position+'</div>' +
-				'<div '+
-					// TODO: Change ID to something else
-					'id="'+new_id+'" '+
-					'class="task" '+
-					'contenteditable=""'+
-				'>Oppgave '+new_id+'</div></li>');
-		
-			$('#task'+new_id+' .task').keyup(TaskKeyup);
-			$('#task'+new_id+' .task').keypress(TaskKeypress);
-			$('#'+new_id).focus(); // TODO: change id for task edit field
-		
-			updateTask ();
+			thesplit = msg.split("\n");
+			for(i = 0; i < thesplit.length; i++)
+			{
+				innersplit = thesplit[i].split(',');
+				action = '';
+				new_position = 0;
+				new_parent_id = 0;
+				new_id = 0;
+				for(j = 0; j < innersplit.length; j++)
+				{
+					innersplit2 = innersplit[j].split(':',2);
+					console.log(innersplit2);
+					if(innersplit[j] == 'created' || innersplit[j] == 'updated')
+					{
+						action = innersplit[j];
+					}
+					else if(innersplit2[0] == 'position')
+					{
+						new_position = innersplit2[1];
+					}
+					else if(innersplit2[0] == 'parent')
+					{
+						new_parent_id = innersplit2[1];
+					}
+					else if(innersplit2[0] == 'id')
+					{
+						new_id = innersplit2[1];
+					}
+					else
+						console.log("none of the above");
+				}
+				console.log('Action: ' + action);
+				console.log('New_position: ' + new_position);
+				console.log('New_parent_id: ' + new_parent_id);
+				console.log('New_id: ' + new_id);
+				if(action == 'created')
+				{
+					// Locate level
+					if(new_parent_id != 0)
+						new_level = parseInt($('#task'+new_parent_id+' .level')) + 1;
+					else
+						new_level = 1;
+					
+					// Add after
+					// TODO: fiks denne delen
+					// Get last task if no parent
+					if(new_parent_id == 0)
+					{
+						add_after = 0;
+						$('#tasks li').each(function()
+						{
+							$.each($(this).children('.task'), function () {
+								add_after = $(this).attr('id');
+							});
+						});
+					}
+					else
+						add_after = new_parent_id;
+					
+					// In with the new task
+					$('#task'+add_after).after('<li id="task'+new_id+'" '+
+						'style="margin-left: '+(new_level*40)+'px;">'+
+						'<div class="sorter">SORT</div>'+
+						'<div class="level">'+new_level+'</div>'+
+						'<div class="id_display">'+new_id+'</div>' +
+						'<div class="parent_id">'+new_parent_id+'</div>' +
+						'<div class="position">'+new_position+'</div>' +
+						'<div '+
+							// TODO: Change ID to something else
+							'id="'+new_id+'" '+
+							'class="task" '+
+							'contenteditable=""'+
+						'>Oppgave '+new_id+'</div></li>');
+					
+					$('#task'+new_id+' .task').keyup(TaskKeyup);
+					$('#task'+new_id+' .task').keypress(TaskKeypress);
+					$('#'+new_id).focus(); // TODO: change id for task edit field
+					
+					updateTask ();
+				}
+			}
+			// TODO: run database (Have been running updateTask())
 		});
 	}
 	else if (e.keyCode == 9) // Tab is pressed
