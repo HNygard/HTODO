@@ -70,7 +70,7 @@ function executeDBQueries (run_after)
 function afterDBQueries (msg)
 {
 	queryRunStatus(false);
-	alert( "Data Saved: \n" + msg );
+	//alert( "Data Saved: \n" + msg );
 	
 	db_run_after(msg);
 	
@@ -83,7 +83,7 @@ function afterDBQueries (msg)
 function queryRunStatus(is_running)
 {
 	db_is_running = is_running;
-	alert("Query_is_running: " + db_is_running);
+	//alert("Query_is_running: " + db_is_running);
 }
 
 function TaskKeyup (e)
@@ -121,7 +121,7 @@ function TaskKeyup (e)
 				for(j = 0; j < innersplit.length; j++)
 				{
 					innersplit2 = innersplit[j].split(':',2);
-					console.log(innersplit2);
+					//console.log(innersplit2);
 					if(innersplit[j] == 'created' || innersplit[j] == 'updated')
 					{
 						action = innersplit[j];
@@ -139,12 +139,14 @@ function TaskKeyup (e)
 						new_id = innersplit2[1];
 					}
 					else
-						console.log("none of the above");
+					{
+						//console.log("none of the above");
+					}
 				}
-				console.log('Action: ' + action);
-				console.log('New_position: ' + new_position);
-				console.log('New_parent_id: ' + new_parent_id);
-				console.log('New_id: ' + new_id);
+				//console.log('Action: ' + action);
+				//console.log('New_position: ' + new_position);
+				//console.log('New_parent_id: ' + new_parent_id);
+				//console.log('New_id: ' + new_id);
 				if(action == 'created')
 				{
 					// Locate level
