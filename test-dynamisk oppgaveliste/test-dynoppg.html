@@ -358,18 +358,20 @@ li {
 .level
 {
 	background-color: lightblue;
-	display: none;
+	width: 70px;
+	float: right;
+	#display: none;
 }
 .id_display
 {
 	background-color: pink;
-	width: 70px;
+	width: 130px;
 	float: right;
 }
 .parent_id
 {
 	background-color: lightgreen;
-	width: 70px;
+	width: 130px;
 	float: right;
 }
 .position
@@ -386,13 +388,13 @@ li {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
-	width: 60%;
+	width: 80%;
 }
 #tasks li
 {
 	margin: 0 5px 5px 5px;
 	padding: 5px;
-	font-size: 1.2em;
+	font-size: 1.1em;
 	height: 1.5em;
 }
 html>body #tasks li
@@ -433,9 +435,9 @@ $(function() {
   </head>
   <body>
 <div id="tester"></div>
-<div class="level">Level</div>
-<div class="id_display">Id</div>
-<div class="parent_id">Parentid</div>
+<div class="level">Level</div><br>
+<div class="id_display">Id</div><br>
+<div class="parent_id">Parentid</div><br>
 <div class="position">Posisjon</div>
 <ul id="tasks">
 	<li id="task1" style="margin-left: 40px;"><div class="sorter">SORT</div><div class="level">1</div><div class="id_display">1</div><div class="parent_id">0</div><div class="position">1</div><div class="task" id="1" contenteditable="">Oppgave</div></li>
