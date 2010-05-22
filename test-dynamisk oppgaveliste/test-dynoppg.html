@@ -156,23 +156,51 @@ function TaskKeyup (e)
 						new_level = 1;
 					
 					// Add after
-					// TODO: fiks denne delen
-					// Get last task if no parent
+					// - We first find the parent
+					// - After the parent we look at level and position
+					add_after = -1;
 					if(new_parent_id == 0)
-					{
-						add_after = 0;
-						$('#tasks li').each(function()
-						{
-							$.each($(this).children('.task'), function () {
-								add_after = $(this).attr('id');
-							});
-						});
-					}
+						parent_found = true;
 					else
-						add_after = new_parent_id;
+						parent_found = false;
+					$('#tasks li').each(function()
+					{
+						if(parent_found)
+						{
+							this_id = 0;
+							$.each($(this).children('.task'), function () {
+								this_id = parseInt($(this).attr('id'));
+							});
+							this_level = 0;
+							$.each($(this).children('.level'), function () {
+								this_level = parseInt($(this).text());
+							});
+							this_position = 0;
+							$.each($(this).children('.position'), function () {
+								this_position = parseInt($(this).text());
+							});
+							if(this_level == new_level
+								&& this_position < new_position)
+							{
+								add_after = this_id;
+							}
+						}
+						else
+						{
+							this_id = 0;
+							$.each($(this).children('.task'), function () {
+								this_id = parseInt($(this).attr('id'));
+							});
+							if(this_id == new_parent_id)
+							{
+								add_after = this_id;
+								parent_found = true;
+							}
+						}
+					});
 					
-					// In with the new task
-					$('#task'+add_after).after('<li id="task'+new_id+'" '+
+					// Make HTML
+					html = '<li id="task'+new_id+'" '+
 						'style="margin-left: '+(new_level*40)+'px;">'+
 						'<div class="sorter">SORT</div>'+
 						'<div class="level">'+new_level+'</div>'+
@@ -184,7 +212,20 @@ function TaskKeyup (e)
 							'id="'+new_id+'" '+
 							'class="task" '+
 							'contenteditable=""'+
-						'>Oppgave '+new_id+'</div></li>');
+						'>Oppgave '+new_id+'</div></li>';
+					
+					// Add in the right place
+					if(add_after == -1)
+					{
+						alert("No task added. TODO!");
+						// Add inside the ul
+						//$('#tasks').add(html);
+					}
+					else
+					{
+						// Add after the one we detected above
+						$('#task'+add_after).after(html);
+					}
 					
 					$('#task'+new_id+' .task').keyup(TaskKeyup);
 					$('#task'+new_id+' .task').keypress(TaskKeypress);
