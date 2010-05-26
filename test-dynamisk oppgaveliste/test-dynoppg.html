@@ -47,11 +47,7 @@ function executeDBQueries (run_after)
 	{
 		queryRunStatus(true);
 		db_run_after = run_after;
-		tmp_arr = new Array();
-		for(i=0; i < database_queries.length; i++)
-		{
-			tmp_arr = 0;
-		}
+		
 		$.ajax({
 			type: "POST",
 			url: "test-dynoppg-phpbackend.php",
