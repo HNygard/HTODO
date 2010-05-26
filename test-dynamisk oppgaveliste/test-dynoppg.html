@@ -151,9 +151,13 @@ function TaskKeyup (e)
 				{
 					// Locate level
 					if(new_parent_id != 0)
-						new_level = parseInt($('#task'+new_parent_id+' .level')) + 1;
+					{
+						new_level = parseInt($('#task'+new_parent_id+' .level').text()) + 1;
+					}
 					else
+					{
 						new_level = 1;
+					}
 					
 					// Add after
 					// - We first find the parent
@@ -320,7 +324,7 @@ function taskSetLevel (task_id, task_level)
 	if(task_level >= 1)
 	{
 		$('#task'+task_id).css('margin-left', task_level*40+'px');
-		$('#task'+task_id+ ' .level').text(task_level);
+		$('#task'+task_id+ ' .level').text("").text(task_level);
 		
 		updateTask();
 	}
