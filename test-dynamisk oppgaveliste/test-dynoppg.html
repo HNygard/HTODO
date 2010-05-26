@@ -72,6 +72,7 @@ function afterDBQueries (msg)
 	
 	if(db_run_again)
 	{
+		console.log('Running again');
 		executeDBQueries(function () { });
 	}
 }
