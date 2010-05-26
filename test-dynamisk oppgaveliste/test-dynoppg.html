@@ -111,9 +111,9 @@ function TaskKeyup (e)
 		executeDBQueries(function (msg)
 		{
 			thesplit = msg.split("\n");
-			for(i = 0; i < thesplit.length; i++)
+			for(split_i = 0; split_i < thesplit.length; split_i++)
 			{
-				innersplit = thesplit[i].split(',');
+				innersplit = thesplit[split_i].split(',');
 				action = '';
 				new_position = 0;
 				new_parent_id = 0;
