@@ -43,7 +43,7 @@ function executeDBQueries (run_after)
 		// Run another one right afterwards
 		db_run_again = true;
 	}
-	else
+	else if (database_queries.length > 0)
 	{
 		queryRunStatus(true);
 		db_run_after = run_after;
