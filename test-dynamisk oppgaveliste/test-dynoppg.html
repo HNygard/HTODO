@@ -240,7 +240,8 @@ function TaskKeyup (e)
 					updateTask ();
 				}
 			}
-			// TODO: run database (Have been running updateTask())
+			
+			executeDBQueries(function (msg) { } );
 		});
 	}
 	else if (e.keyCode == 9) // Tab is pressed
@@ -259,6 +260,8 @@ function TaskKeyup (e)
 			next_level++;
 		
 		taskSetLevel(current_id, next_level);
+		
+		executeDBQueries(function (msg) { } );
 	}
 	else if (e.keyCode == 38 || e.keyCode == 40) // Up or down
 	{
@@ -475,6 +478,7 @@ $(function() {
 		handle: 'div.sorter',
 		update: function() {
 			updateTask ();
+			executeDBQueries(function (msg) { } );
 		}
 	});
 	//$("#tasks").disableSelection();
