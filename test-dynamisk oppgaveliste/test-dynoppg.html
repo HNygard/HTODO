@@ -164,9 +164,10 @@ function TaskKeyup (e)
 						parent_found = true;
 					else
 						parent_found = false;
+					passed_children = false;
 					$('#tasks li').each(function()
 					{
-						if(parent_found)
+						if(parent_found && !passed_children)
 						{
 							this_id = 0;
 							$.each($(this).children('.task'), function () {
@@ -184,6 +185,10 @@ function TaskKeyup (e)
 								&& this_position < new_position)
 							{
 								add_after = this_id;
+							}
+							else if (this_level < new_level)
+							{
+								passed_children = true;
 							}
 						}
 						else
