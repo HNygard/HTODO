@@ -81,6 +81,11 @@ function afterDBQueries (msg)
 
 function queryRunStatus(is_running)
 {
+	if(is_running)		
+		$('#workingIcon').fadeIn();
+	else
+		$('#workingIcon').fadeOut();
+	
 	db_is_running = is_running;
 	//alert("Query_is_running: " + db_is_running);
 }
@@ -545,6 +550,19 @@ html>body #tasks li
 	border:1px dashed #808080;
 	text-decoration:line-through;
 }
+.workingIcon
+{
+	bottom:0;
+	direction:ltr;
+	height:32px;
+	left:auto;
+	position:fixed;
+	right:0;
+	z-index:99;
+	width: 32px;
+	padding: 5px;
+	display: none;
+}
 </style>
 <script type="text/javascript">
 $(function() {
@@ -563,6 +581,7 @@ $(function() {
 
   </head>
   <body>
+<div id="workingIcon" class="workingIcon"><img width="32" height="32" src="loading.gif"></div>
 <div id="tester"></div>
 <div class="level">Level</div><br>
 <div class="id_display">Id</div><br>
