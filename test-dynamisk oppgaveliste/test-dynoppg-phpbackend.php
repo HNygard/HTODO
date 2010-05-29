@@ -50,15 +50,39 @@ foreach($_POST['queries'] as $line)
 			$parent = 0;
 		if(!isset($position))
 			$position = 0;
+		
+		// TODO: run against database
+		
+		$id = time();
 		echo
 			'created,'. // status
-			'id:'.time().','. // id
+			'id:'.$id.','. // id
 			'parent:'.$parent.','. // parent
 			'position:'.$position; // position
 	}
 	elseif($split[0] == 'update')
 	{
-		echo 'aight';
+		for($i = 1; $i < count($split); $i++)
+		{
+			$r = matchParameters($split[$i]);
+			if($r[0] == 'parent')
+				$parent = $r[1];
+			elseif($r[0] == 'position')
+				$position = $r[1];
+		}
+		
+		if(!isset($parent))
+			$parent = 0;
+		if(!isset($position))
+			$position = 0;
+		
+		// TODO: run against database
+		
+		echo
+			'updated,'. // status
+			'id:'.$id.','. // id
+			'parent:'.$parent.','. // parent
+			'position:'.$position; // position
 	}
 	else
 	{
