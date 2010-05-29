@@ -214,6 +214,14 @@ function afterDBQueries (msg)
 			
 			updateTask ();
 		}
+		else if (action == 'updated')
+		{
+			
+		}
+		else
+		{
+			alert('Unknown action.');
+		}
 	}
 	
 	executeDBQueries(function (msg) { } );
