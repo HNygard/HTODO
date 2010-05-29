@@ -80,8 +80,147 @@ function afterDBQueries (msg)
 	
 	db_run_after(msg);
 	
+	thesplit = msg.split("\n");
+	for(split_i = 0; split_i < thesplit.length; split_i++)
+	{
+		innersplit = thesplit[split_i].split(',');
+		action = '';
+		new_position = 0;
+		new_parent_id = 0;
+		new_id = 0;
+		for(j = 0; j < innersplit.length; j++)
+		{
+			innersplit2 = innersplit[j].split(':',2);
+			//console.log(innersplit2);
+			if(innersplit[j] == 'created' || innersplit[j] == 'updated')
+			{
+				action = innersplit[j];
+			}
+			else if(innersplit2[0] == 'position')
+			{
+				new_position = innersplit2[1];
+			}
+			else if(innersplit2[0] == 'parent')
+			{
+				new_parent_id = innersplit2[1];
+			}
+			else if(innersplit2[0] == 'id')
+			{
+				new_id = innersplit2[1];
+			}
+			else
+			{
+				//console.log("none of the above");
+			}
+		}
+		//console.log('Action: ' + action);
+		//console.log('New_position: ' + new_position);
+		//console.log('New_parent_id: ' + new_parent_id);
+		//console.log('New_id: ' + new_id);
+		if(action == 'created')
+		{
+			// Locate level
+			if(new_parent_id != 0)
+			{
+				new_level = parseInt($('#task'+new_parent_id+' .level').text()) + 1;
+			}
+			else
+			{
+				new_level = 1;
+			}
+			
+			// Add after
+			// - We first find the parent
+			// - After the parent we look at level and position
+			add_after = -1;
+			if(new_parent_id == 0)
+				parent_found = true;
+			else
+				parent_found = false;
+			passed_children = false;
+			$('#tasks li').each(function()
+			{
+				if(parent_found && !passed_children)
+				{
+					this_id = 0;
+					$.each($(this).children('.task'), function () {
+						this_id = parseInt($(this).attr('id'));
+					});
+					this_level = 0;
+					$.each($(this).children('.level'), function () {
+						this_level = parseInt($(this).text());
+					});
+					this_position = 0;
+					$.each($(this).children('.position'), function () {
+						this_position = parseInt($(this).text());
+					});
+					if(this_level == new_level
+						&& this_position < new_position)
+					{
+						add_after = this_id;
+					}
+					else if (this_level < new_level)
+					{
+						passed_children = true;
+					}
+				}
+				else
+				{
+					this_id = 0;
+					$.each($(this).children('.task'), function () {
+						this_id = parseInt($(this).attr('id'));
+					});
+					if(this_id == new_parent_id)
+					{
+						add_after = this_id;
+						parent_found = true;
+					}
+				}
+			});
+			
+			// Make HTML
+			html = '<li id="task'+new_id+'" '+
+				'style="margin-left: '+(new_level*40)+'px;">'+
+				'<div class="sorter"></div>'+
+				'<div class="finish notfinished"></div>'+
+				'<div class="level">'+new_level+'</div>'+
+				'<div class="id_display">'+new_id+'</div>' +
+				'<div class="parent_id">'+new_parent_id+'</div>' +
+				'<div class="position">'+new_position+'</div>' +
+				'<div '+
+					// TODO: Change ID to something else
+					'id="'+new_id+'" '+
+					'class="task taskNotfinished" '+
+					'contenteditable=""'+
+				'>Oppgave '+new_id+'</div></li>';
+			
+			// Add in the right place
+			if(add_after == -1)
+			{
+				alert("No task added. TODO!");
+				// Add inside the ul
+				//$('#tasks').add(html);
+			}
+			else
+			{
+				// Add after the one we detected above
+				$('#task'+add_after).after(html);
+			}
+			
+			$('#task'+new_id+' .task').keyup(TaskKeyup);
+			$('#task'+new_id+' .task').keypress(TaskKeypress);
+			$('#task'+new_id+' .finish').click(TaskFinished);
+			$('#'+new_id).focus(); // TODO: change id for task edit field
+			
+			updateTask ();
+		}
+	}
+	
+	executeDBQueries(function (msg) { } );
+	
 	if(db_run_again)
 	{
+		// TODO: remove this?
 		console.log('Running again');
 		executeDBQueries(function () { });
 	}
@@ -143,146 +282,7 @@ function TaskKeyup (e)
 		// Creating task in database and getting id
 		addDBQuery('create,parent:'+parent_id+',position:'+position);
 		
-		executeDBQueries(function (msg)
-		{
-			thesplit = msg.split("\n");
-			for(split_i = 0; split_i < thesplit.length; split_i++)
-			{
-				innersplit = thesplit[split_i].split(',');
-				action = '';
-				new_position = 0;
-				new_parent_id = 0;
-				new_id = 0;
-				for(j = 0; j < innersplit.length; j++)
-				{
-					innersplit2 = innersplit[j].split(':',2);
-					//console.log(innersplit2);
-					if(innersplit[j] == 'created' || innersplit[j] == 'updated')
-					{
-						action = innersplit[j];
-					}
-					else if(innersplit2[0] == 'position')
-					{
-						new_position = innersplit2[1];
-					}
-					else if(innersplit2[0] == 'parent')
-					{
-						new_parent_id = innersplit2[1];
-					}
-					else if(innersplit2[0] == 'id')
-					{
-						new_id = innersplit2[1];
-					}
-					else
-					{
-						//console.log("none of the above");
-					}
-				}
-				//console.log('Action: ' + action);
-				//console.log('New_position: ' + new_position);
-				//console.log('New_parent_id: ' + new_parent_id);
-				//console.log('New_id: ' + new_id);
-				if(action == 'created')
-				{
-					// Locate level
-					if(new_parent_id != 0)
-					{
-						new_level = parseInt($('#task'+new_parent_id+' .level').text()) + 1;
-					}
-					else
-					{
-						new_level = 1;
-					}
-					
-					// Add after
-					// - We first find the parent
-					// - After the parent we look at level and position
-					add_after = -1;
-					if(new_parent_id == 0)
-						parent_found = true;
-					else
-						parent_found = false;
-					passed_children = false;
-					$('#tasks li').each(function()
-					{
-						if(parent_found && !passed_children)
-						{
-							this_id = 0;
-							$.each($(this).children('.task'), function () {
-								this_id = parseInt($(this).attr('id'));
-							});
-							this_level = 0;
-							$.each($(this).children('.level'), function () {
-								this_level = parseInt($(this).text());
-							});
-							this_position = 0;
-							$.each($(this).children('.position'), function () {
-								this_position = parseInt($(this).text());
-							});
-							if(this_level == new_level
-								&& this_position < new_position)
-							{
-								add_after = this_id;
-							}
-							else if (this_level < new_level)
-							{
-								passed_children = true;
-							}
-						}
-						else
-						{
-							this_id = 0;
-							$.each($(this).children('.task'), function () {
-								this_id = parseInt($(this).attr('id'));
-							});
-							if(this_id == new_parent_id)
-							{
-								add_after = this_id;
-								parent_found = true;
-							}
-						}
-					});
-					
-					// Make HTML
-					html = '<li id="task'+new_id+'" '+
-						'style="margin-left: '+(new_level*40)+'px;">'+
-						'<div class="sorter"></div>'+
-						'<div class="finish notfinished"></div>'+
-						'<div class="level">'+new_level+'</div>'+
-						'<div class="id_display">'+new_id+'</div>' +
-						'<div class="parent_id">'+new_parent_id+'</div>' +
-						'<div class="position">'+new_position+'</div>' +
-						'<div '+
-							// TODO: Change ID to something else
-							'id="'+new_id+'" '+
-							'class="task taskNotfinished" '+
-							'contenteditable=""'+
-						'>Oppgave '+new_id+'</div></li>';
-					
-					// Add in the right place
-					if(add_after == -1)
-					{
-						alert("No task added. TODO!");
-						// Add inside the ul
-						//$('#tasks').add(html);
-					}
-					else
-					{
-						// Add after the one we detected above
-						$('#task'+add_after).after(html);
-					}
-					
-					$('#task'+new_id+' .task').keyup(TaskKeyup);
-					$('#task'+new_id+' .task').keypress(TaskKeypress);
-					$('#task'+new_id+' .finish').click(TaskFinished);
-					$('#'+new_id).focus(); // TODO: change id for task edit field
-					
-					updateTask ();
-				}
-			}
-			
-			executeDBQueries(function (msg) { } );
-		});
+		executeDBQueries(function (msg) { });
 	}
 	else if (e.keyCode == 9) // Tab is pressed
 	{
