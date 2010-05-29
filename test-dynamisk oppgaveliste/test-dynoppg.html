@@ -10,6 +10,8 @@ $(document).ready(function()
 {
 	$(".task").keyup(TaskKeyup);
 	$(".task").keypress(TaskKeypress);
+	$(".task").focusin(TaskFocusin);
+	$(".task").focusout(TaskFocusout);
 	
 	$(".finish").click(TaskFinished);
 	
@@ -19,6 +21,7 @@ $(document).ready(function()
 	});
 });
 
+task_in_focus_before = '';
 tmp_new_task = new Array();
 db_is_running = false;
 db_run_again = false;
@@ -30,6 +33,11 @@ function addDBQuery (query)
 	// Debug:
 	//console.log(database_queries);
 	// TODO: remove
+	updateDBdebug();
+}
+
+function updateDBdebug ()
+{
 	text = "";
 	for(i = 0; i < database_queries.length; i++)
 	{
@@ -76,6 +84,29 @@ function afterDBQueries (msg)
 	{
 		console.log('Running again');
 		executeDBQueries(function () { });
+	}
+}
+
+function addDBTextUpdate (this_id, new_text)
+{
+	// Update already existing line or make a new one
+	
+	found = false;
+	for(i = 0; i < database_queries.length; i++)
+	{
+		if(database_queries[i].substr(0, ('update,id:'+this_id).length) == 'update,id:'+this_id)
+		{
+			// Update the text:
+			database_queries[i] = 'update,id:'+this_id+',text:'+new_text;
+			updateDBdebug(); // TODO: remove
+			found = true;
+		}
+	}
+
+	if(!found)
+	{
+		// Not found, adding query
+		addDBQuery ('update,id:'+this_id+',text:'+new_text);
 	}
 }
 
@@ -329,6 +360,19 @@ function TaskKeypress(e)
 {
 	if(e.keyCode == 13 || e.keyCode == 9) {
 		return false;
+	}
+}
+
+function TaskFocusin ()
+{
+	task_in_focus_before = $(this).text();
+}
+
+function TaskFocusout ()
+{
+	if(task_in_focus_before != $(this).text())
+	{
+		addDBTextUpdate ($(this).attr('id'), $(this).text());
 	}
 }
 
