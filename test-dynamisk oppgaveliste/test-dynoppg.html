@@ -11,6 +11,8 @@ $(document).ready(function()
 	$(".task").keyup(TaskKeyup);
 	$(".task").keypress(TaskKeypress);
 	
+	$(".finish").click(TaskFinished);
+	
 	// Debug / temp
 	$("#dbdebug").click(function () {
 		executeDBQueries();
@@ -208,7 +210,8 @@ function TaskKeyup (e)
 					// Make HTML
 					html = '<li id="task'+new_id+'" '+
 						'style="margin-left: '+(new_level*40)+'px;">'+
-						'<div class="sorter">SORT</div>'+
+						'<div class="sorter"></div>'+
+						'<div class="finish notfinished"></div>'+
 						'<div class="level">'+new_level+'</div>'+
 						'<div class="id_display">'+new_id+'</div>' +
 						'<div class="parent_id">'+new_parent_id+'</div>' +
@@ -216,7 +219,7 @@ function TaskKeyup (e)
 						'<div '+
 							// TODO: Change ID to something else
 							'id="'+new_id+'" '+
-							'class="task" '+
+							'class="task taskNotfinished" '+
 							'contenteditable=""'+
 						'>Oppgave '+new_id+'</div></li>';
 					
@@ -235,6 +238,7 @@ function TaskKeyup (e)
 					
 					$('#task'+new_id+' .task').keyup(TaskKeyup);
 					$('#task'+new_id+' .task').keypress(TaskKeypress);
+					$('#task'+new_id+' .finish').click(TaskFinished);
 					$('#'+new_id).focus(); // TODO: change id for task edit field
 					
 					updateTask ();
@@ -400,6 +404,40 @@ function updateTask ()
 	});
 }
 
+function TaskFinished(e)
+{
+	// Find current id
+	current_id = parseInt($(this).parent().children('.task').attr('id'));
+	console.log('Current: ' + current_id);
+	
+	if($(this).hasClass('notfinished'))
+	{
+		// Finish the task
+		$(this).removeClass('notfinished').addClass('finished');
+		$('#task'+current_id+ ' .task').removeClass('taskNotfinished').addClass('taskFinished');
+		
+		// Setting 100 % finshed and updating database
+		// TODO: update html
+		addDBQuery('update,id:'+current_id+',finshed:100');
+	}
+	else
+	{
+		// Unfinish the task
+		$(this).removeClass('finished').addClass('notfinished');
+		$('#task'+current_id+ ' .task').removeClass('taskFinished').addClass('taskNotfinished');
+		
+		// Setting 0 % finished and updating database
+		// TODO: update html
+		addDBQuery('update,id:'+current_id+',finshed:0'); // TODO: -1 heller?
+	}
+	
+	// Update parents
+	// TODO:
+	
+	// Execute database queries
+	executeDBQueries(function (msg) { } );
+}
+
 </script>
 
 <style>
@@ -432,7 +470,7 @@ li {
 	width: 70px;
 	float: right;
 }
-.task { border: 1px solid black; margin: 5px; padding: 5px; width: 400px;}
+.task { margin: 5px; padding: 5px; width: 400px;}
 </style>
 <style type="text/css">
 #tasks
@@ -461,13 +499,51 @@ html>body #tasks li
 }
 .sorter
 {
-	display: inline;
+	float: left;
+	background-image:url("http://www.gstatic.com/tasks/embed-tasks-sprites9.png");
+	cursor:-moz-grab;
+	vertical-align:top;
+	-moz-user-select:none;
+	background-position:-254px 0;
+	background-repeat:repeat-y;
+	width:8px;
+	height: 100%;
+	margin-right: 5px;
+}
+.finish
+{
+	width: 16px;
+	height: 16px;
+	-moz-user-select:none;
+	background-image:url("http://www.gstatic.com/tasks/embed-tasks-sprites9.png");
+	margin-top:0;
+	float: left;
+	cursor: pointer;
+}
+.notfinished
+{
+	background-position:-16px -2px;
+}
+.finished
+{
+	background-position:-32px -2px;
 }
 .task
 {
 	position: relative;
 	top: 3px;
 	display: inline;
+}
+.taskNotfinished
+{
+	border: 1px solid black;
+	color: black;
+}
+.taskFinished
+{
+	color:#808080;
+	border:1px dashed #808080;
+	text-decoration:line-through;
 }
 </style>
 <script type="text/javascript">
@@ -493,8 +569,8 @@ $(function() {
 <div class="parent_id">Parentid</div><br>
 <div class="position">Posisjon</div>
 <ul id="tasks">
-	<li id="task1" style="margin-left: 40px;"><div class="sorter">SORT</div><div class="level">1</div><div class="id_display">1</div><div class="parent_id">0</div><div class="position">1</div><div class="task" id="1" contenteditable="">Oppgave</div></li>
-	<li id="task2" style="margin-left: 40px;"><div class="sorter">SORT</div><div class="level">1</div><div class="id_display">2</div><div class="parent_id">0</div><div class="position">2</div><div class="task" id="2" contenteditable="">Oppgave 2</div></li>
+	<li id="task1" style="margin-left: 40px;"><div class="sorter"></div><div class="finish notfinished"></div><div class="level">1</div><div class="id_display">1</div><div class="parent_id">0</div><div class="position">1</div><div class="task taskNotfinished" id="1" contenteditable="">Oppgave</div></li>
+	<li id="task2" style="margin-left: 40px;"><div class="sorter"></div><div class="finish notfinished"></div><div class="level">1</div><div class="id_display">2</div><div class="parent_id">0</div><div class="position">2</div><div class="task taskNotfinished" id="2" contenteditable="">Oppgave 2</div></li>
 </ul>
 
 <div id="dbdebug"></div>
