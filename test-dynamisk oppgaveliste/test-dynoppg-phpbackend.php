@@ -99,7 +99,9 @@ foreach($_POST['queries'] as $line)
 			'created,'. // status
 			'id:'.$id.','. // id
 			'parent:'.$parent.','. // parent
-			'position:'.$position; // position
+			'position:'.$position.','. // position
+			'text:"'.$text.'",'. // text
+			'finished:'.$finished; // finished
 	}
 	elseif($split[0] == 'update')
 	{
@@ -116,6 +118,7 @@ foreach($_POST['queries'] as $line)
 		
 		// TODO: run against database
 		
+		// TODO: only return updated rows
 		echo
 			'updated,'. // status
 			'id:'.$id.','. // id
