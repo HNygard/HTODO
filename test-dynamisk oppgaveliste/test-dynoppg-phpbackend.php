@@ -1,5 +1,25 @@
 <?php
 
+/*
+ * Format - input:
+ * <action>,<param>:<value>,<param>:<value>,etc
+ *
+ * Optional how many parameters there are. For updates, if it's
+ * not set it will not be touched in database. Creates uses some
+ * default values
+ * 
+ * Action can be:
+ * - update
+ * - create
+ * 
+ * Param can be (input and output):
+ * - position, value int
+ * - parent, value int
+ * - id, value int
+ * - text, value text surrounded by "<value>", escaped ": ""
+ * - finished, value 0/1 => casted to boolean
+ */
+
 if(isset($_GET['queries']))
 {
 	$_POST['queries'] = $_GET['queries'];
@@ -48,7 +68,7 @@ $this_line_num = 0;
 foreach($_POST['queries'] as $line)
 {
 	$this_line_num++;
-	$split = explode(',', $line);
+	$split = explode(',', $line); // TODO: dont use explode, must support text with ,
 	
 	if(!count($split) && count($split) < 2)
 	{
