@@ -60,7 +60,7 @@ function matchParameters($param)
 		{
 			$value = (int)$split[1];
 			if($value < -1 || $value > 100)
-				$value = -1;
+				return array();
 			
 			return array($split[0], $value);
 		}
