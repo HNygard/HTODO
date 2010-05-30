@@ -1,6 +1,14 @@
 <?php
 
-if(!isset($_POST['queries']) || !is_array($_POST['queries']))
+if(isset($_GET['queries']))
+{
+	$_POST['queries'] = $_GET['queries'];
+}
+
+if
+(
+	(!isset($_POST['queries']) || !is_array($_POST['queries']))
+)
 {
 	echo 'Error'; // TODO: send en http feilmelding heller
 	exit;
