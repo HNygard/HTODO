@@ -88,6 +88,7 @@ function afterDBQueries (msg)
 		new_position = 0;
 		new_parent_id = 0;
 		new_id = 0;
+		new_finished = -1;
 		for(j = 0; j < innersplit.length; j++)
 		{
 			innersplit2 = innersplit[j].split(':',2);
@@ -107,6 +108,10 @@ function afterDBQueries (msg)
 			else if(innersplit2[0] == 'id')
 			{
 				new_id = innersplit2[1];
+			}
+			else if(innersplit2[0] == 'finished')
+			{
+				new_finished = innersplit2[1];
 			}
 			else
 			{
@@ -179,6 +184,10 @@ function afterDBQueries (msg)
 			});
 			
 			// Make HTML
+			if(new_finished == -1)
+				new_finished2 = 0;
+			else
+				new_finished2 = new_finished;
 			html = '<li id="task'+new_id+'" '+
 				'style="margin-left: '+(new_level*40)+'px;">'+
 				'<div class="sorter"></div>'+
@@ -187,6 +196,8 @@ function afterDBQueries (msg)
 				'<div class="id_display">'+new_id+'</div>' +
 				'<div class="parent_id">'+new_parent_id+'</div>' +
 				'<div class="position">'+new_position+'</div>' +
+				'<div class="finisheddisplay">'+new_finished2+' %</div>' +
+				'<div class="finishedvalue">'+new_finished+'</div>' +
 				'<div '+
 					// TODO: Change ID to something else
 					'id="'+new_id+'" '+
@@ -470,23 +481,43 @@ function TaskFinished(e)
 	if($(this).hasClass('notfinished'))
 	{
 		// Finish the task
-		$(this).removeClass('notfinished').addClass('finished');
-		$('#task'+current_id+ ' .task').removeClass('taskNotfinished').addClass('taskFinished');
-		
-		// Setting 100 % finshed and updating database
-		// TODO: update html
-		addDBQuery('update,id:'+current_id+',finshed:100');
+		taskUpdateFinished(current_id, 100);
 	}
 	else
 	{
-		// Unfinish the task
-		$(this).removeClass('finished').addClass('notfinished');
-		$('#task'+current_id+ ' .task').removeClass('taskFinished').addClass('taskNotfinished');
-		
-		// Setting 0 % finished and updating database
-		// TODO: update html
-		addDBQuery('update,id:'+current_id+',finshed:0'); // TODO: -1 heller?
+		// Set it back to dependent on children
+		taskUpdateFinished(current_id, -1);
 	}
+}
+
+function taskUpdateFinished(task_id, finishedvalue)
+{
+	if(finishedvalue == 100)
+	{
+		// The task is finished
+		$('#task'+task_id+ ' .finish').removeClass('notfinished').addClass('finished');
+		$('#task'+task_id+ ' .task').removeClass('taskNotfinished').addClass('taskFinished');
+		
+	}
+	else
+	{
+		// The task is not finished
+		$('#task'+task_id+ ' .finish').removeClass('finished').addClass('notfinished');
+		$('#task'+task_id+ ' .task').removeClass('taskFinished').addClass('taskNotfinished');
+		
+
+	}
+	// Updating text
+	if(finishedvalue == -1)
+		$('#task'+task_id+ ' .finisheddisplay').text('0 %');
+	else
+		$('#task'+task_id+ ' .finisheddisplay').text(finishedvalue + ' %');
+	
+	// Updating the in-html saved value
+	$('#task'+task_id+ ' .finishedvalue').text(finishedvalue);
+	
+	// Updating database
+	addDBQuery('update,id:'+task_id+',finished:' + finishedvalue);
 	
 	// Update parents
 	// TODO:
@@ -526,6 +557,19 @@ li {
 	background-color: yellow;
 	width: 70px;
 	float: right;
+}
+.finisheddisplay
+{
+	background-color: orange;
+	width: 70px;
+	float: right;
+}
+.finishedvalue
+{
+	background-color: orange;
+	width: 70px;
+	float: right;
+	display: none;
 }
 .task { margin: 5px; padding: 5px; width: 400px;}
 </style>
@@ -638,10 +682,11 @@ $(function() {
 <div class="level">Level</div><br>
 <div class="id_display">Id</div><br>
 <div class="parent_id">Parentid</div><br>
-<div class="position">Posisjon</div>
+<div class="finisheddisplay">Finisheddisplay</div><br>
+<div class="finishedvalue">Finished</div>
 <ul id="tasks">
-	<li id="task1" style="margin-left: 40px;"><div class="sorter"></div><div class="finish notfinished"></div><div class="level">1</div><div class="id_display">1</div><div class="parent_id">0</div><div class="position">1</div><div class="task taskNotfinished" id="1" contenteditable="">Oppgave</div></li>
-	<li id="task2" style="margin-left: 40px;"><div class="sorter"></div><div class="finish notfinished"></div><div class="level">1</div><div class="id_display">2</div><div class="parent_id">0</div><div class="position">2</div><div class="task taskNotfinished" id="2" contenteditable="">Oppgave 2</div></li>
+	<li id="task1" style="margin-left: 40px;"><div class="sorter"></div><div class="finish notfinished"></div><div class="level">1</div><div class="id_display">1</div><div class="parent_id">0</div><div class="position">1</div><div class="finisheddisplay">0 %</div><div class="finishedvalue">-1</div><div class="task taskNotfinished" id="1" contenteditable="">Oppgave</div></li>
+	<li id="task2" style="margin-left: 40px;"><div class="sorter"></div><div class="finish notfinished"></div><div class="level">1</div><div class="id_display">2</div><div class="parent_id">0</div><div class="position">2</div><div class="finisheddisplay">0 %</div><div class="finishedvalue">-1</div><div class="task taskNotfinished" id="2" contenteditable="">Oppgave 2</div></li>
 </ul>
 
 <div id="dbdebug"></div>
