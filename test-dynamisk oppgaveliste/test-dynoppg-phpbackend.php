@@ -82,10 +82,15 @@ foreach($_POST['queries'] as $line)
 			${$r[0]} = $r[1];
 		}
 		
+		// Default values
 		if(!isset($parent))
 			$parent = 0;
 		if(!isset($position))
 			$position = 0;
+		if(!isset($text))
+			$text = '';
+		if(!isset($finished))
+			$finished = false;
 		
 		// TODO: run against database
 		
