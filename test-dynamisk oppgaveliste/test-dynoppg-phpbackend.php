@@ -30,6 +30,14 @@ function matchParameters($param)
 			$split[0] == 'id'
 		)
 			return array($split[0], (int)$split[1]);
+		elseif (
+			$split[0] == 'text'
+		)
+			return array($split[0], $split[1]); // TODO: validate info
+		elseif (
+			$split[0] == 'finished'
+		)
+			return array($split[0], (bool)$split[1]);
 		else
 			return array();
 	}
@@ -48,10 +56,7 @@ foreach($_POST['queries'] as $line)
 		for($i = 1; $i < count($split); $i++)
 		{
 			$r = matchParameters($split[$i]);
-			if($r[0] == 'parent')
-				$parent = $r[1];
-			elseif($r[0] == 'position')
-				$position = $r[1];
+			${$r[0]} = $r[1];
 		}
 		
 		if(!isset($parent))
@@ -73,10 +78,7 @@ foreach($_POST['queries'] as $line)
 		for($i = 1; $i < count($split); $i++)
 		{
 			$r = matchParameters($split[$i]);
-			if($r[0] == 'parent')
-				$parent = $r[1];
-			elseif($r[0] == 'position')
-				$position = $r[1];
+			${$r[0]} = $r[1];
 		}
 		
 		if(!isset($parent))
