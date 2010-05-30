@@ -17,7 +17,7 @@
  * - parent, value int
  * - id, value int
  * - text, value text surrounded by "<value>", escaped ": ""
- * - finished, value 0/1 => casted to boolean
+ * - finished, value int, -1 to 100
  */
 
 if(isset($_GET['queries']))
@@ -57,7 +57,13 @@ function matchParameters($param)
 		elseif (
 			$split[0] == 'finished'
 		)
-			return array($split[0], (bool)$split[1]);
+		{
+			$value = (int)$split[1];
+			if($value < -1 || $value > 100)
+				$value = -1;
+			
+			return array($split[0], $value);
+		}
 		else
 			return array();
 	}
@@ -105,7 +111,7 @@ foreach($_POST['queries'] as $line)
 			if(!isset($text))
 				$text = '';
 			if(!isset($finished))
-				$finished = false;
+				$finished = -1;
 	
 			// Running query against database
 			// TODO: run against database
