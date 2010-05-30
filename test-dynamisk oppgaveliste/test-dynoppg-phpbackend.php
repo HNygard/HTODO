@@ -92,6 +92,7 @@ foreach($_POST['queries'] as $line)
 		if(!isset($finished))
 			$finished = false;
 		
+		// Running query against database
 		// TODO: run against database
 		
 		$id = time();
