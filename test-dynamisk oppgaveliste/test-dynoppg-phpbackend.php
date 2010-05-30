@@ -43,8 +43,11 @@ function matchParameters($param)
 	}
 }
 
+$num_lines = count($_POST['queries']);
+$this_line_num = 0;
 foreach($_POST['queries'] as $line)
 {
+	$this_line_num++;
 	$split = explode(',', $line);
 	
 	if(!count($split) && count($split) < 2)
@@ -99,7 +102,8 @@ foreach($_POST['queries'] as $line)
 		echo 'lineerror 2 - '.$split[0];
 	}
 	
-	echo chr(10);
+	if($this_line_num < $num_lines)
+		echo chr(10);
 }
 
 ?>
