@@ -74,61 +74,71 @@ foreach($_POST['queries'] as $line)
 	{
 		echo 'lineerror 1';
 	}
-	elseif($split[0] == 'create')
+	elseif($split[0] != 'create' && $split[0] != 'update')
 	{
-		for($i = 1; $i < count($split); $i++)
-		{
-			$r = matchParameters($split[$i]);
-			${$r[0]} = $r[1];
-		}
-		
-		// Default values
-		if(!isset($parent))
-			$parent = 0;
-		if(!isset($position))
-			$position = 0;
-		if(!isset($text))
-			$text = '';
-		if(!isset($finished))
-			$finished = false;
-		
-		// Running query against database
-		// TODO: run against database
-		
-		$id = time();
-		echo
-			'created,'. // status
-			'id:'.$id.','. // id
-			'parent:'.$parent.','. // parent
-			'position:'.$position.','. // position
-			'text:"'.$text.'",'. // text
-			'finished:'.$finished; // finished
-	}
-	elseif($split[0] == 'update')
-	{
-		for($i = 1; $i < count($split); $i++)
-		{
-			$r = matchParameters($split[$i]);
-			${$r[0]} = $r[1];
-		}
-		
-		if(!isset($parent))
-			$parent = 0;
-		if(!isset($position))
-			$position = 0;
-		
-		// TODO: run against database
-		
-		// TODO: only return updated rows
-		echo
-			'updated,'. // status
-			'id:'.$id.','. // id
-			'parent:'.$parent.','. // parent
-			'position:'.$position; // position
+		echo 'lineerror 2 - '.$split[0];
 	}
 	else
 	{
-		echo 'lineerror 2 - '.$split[0];
+		$error = false;
+		for($i = 1; $i < count($split) && !$error; $i++)
+		{
+			$r = matchParameters($split[$i]);
+			if(!count($r))
+			{
+				$error = true;
+				echo 'lineerror 3 - Unknown parameter: '.$split[$i];
+			}
+			else
+			{
+				${$r[0]} = $r[1];
+			}
+		}
+		
+		if(!$error && $split[0] == 'create')
+		{
+			// Default values
+			if(!isset($parent))
+				$parent = 0;
+			if(!isset($position))
+				$position = 0;
+			if(!isset($text))
+				$text = '';
+			if(!isset($finished))
+				$finished = false;
+	
+			// Running query against database
+			// TODO: run against database
+	
+			$id = time();
+			echo
+				'created,'. // status
+				'id:'.$id.','. // id
+				'parent:'.$parent.','. // parent
+				'position:'.$position.','. // position
+				'text:"'.$text.'",'. // text
+				'finished:'.$finished; // finished
+		}
+		elseif(!$error && $split[0] == 'update')
+		{
+			// TODO: remove:
+			if(!isset($parent))
+				$parent = 0;
+			if(!isset($position))
+				$position = 0;
+			
+			// Detect changes
+			// TODO: detect changes
+	
+			// TODO: run against database
+	
+			// TODO: only return updated rows
+			echo
+				'updated,'. // status
+				'id:'.$id.','. // id
+				'parent:'.$parent.','. // parent
+				'position:'.$position; // position
+		}
 	}
 	
 	if($this_line_num < $num_lines)
