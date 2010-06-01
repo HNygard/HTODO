@@ -275,6 +275,9 @@ function addDBTextUpdate (this_id, new_text)
 		// Not found, adding query
 		addDBQuery ('update,id:'+this_id+',text:'+new_text);
 	}
+	
+	// Execute database queries
+	executeDBQueries(function (msg) { } );
 }
 
 function queryRunStatus(is_running)
