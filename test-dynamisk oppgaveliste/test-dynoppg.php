@@ -738,16 +738,26 @@ function print_task($R, $level)
 	else
 		$finisheddisplay = $R['finished'];
 	
+	if($R['finished'] == 100)
+	{
+		$task_finished_class = 'taskFinished';
+		$finished_class = 'finished';
+	}
+	else
+	{
+		$task_finished_class = 'taskNotfinished';
+		$finished_class = 'notfinished';
+	}
 	echo '	<li id="task'.$R['id'].'" style="margin-left: '.(40*$level).'px;">'.
 		'<div class="sorter"></div>'.
-		'<div class="finish notfinished"></div>'.
+		'<div class="finish '.$finished_class.'"></div>'.
 		'<div class="level">'.$level.'</div>'.
 		'<div class="id_display">'.$R['id'].'</div>'.
 		'<div class="parent_id">'.$R['parent'].'</div>'.
 		'<div class="position">'.$R['position'].'</div>'.
 		'<div class="finisheddisplay">'.$finisheddisplay.' %</div>'.
 		'<div class="finishedvalue">'.$R['finished'].'</div>'.
-		'<div class="task taskNotfinished" id="'.$R['id'].'" contenteditable="">'.$R['text'].'</div>'.
+		'<div class="task '.$task_finished_class.'" id="'.$R['id'].'" contenteditable="">'.$R['text'].'</div>'.
 	'</li>'.chr(10);
 	
 	// Print the children of this task
