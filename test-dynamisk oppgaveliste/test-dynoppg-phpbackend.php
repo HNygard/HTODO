@@ -89,6 +89,7 @@ foreach($_POST['queries'] as $line)
 	else
 	{
 		$error = false;
+		$values = array();
 		for($i = 1; $i < count($split) && !$error; $i++)
 		{
 			$r = matchParameters($split[$i]);
@@ -99,53 +100,88 @@ foreach($_POST['queries'] as $line)
 			}
 			else
 			{
-				${$r[0]} = $r[1];
+				$values[$r[0]] = $r[1];
 			}
 		}
 		
 		if(!$error && $split[0] == 'create')
 		{
 			// Default values
-			if(!isset($parent))
-				$parent = 0;
-			if(!isset($position))
-				$position = 0;
-			if(!isset($text))
-				$text = '';
-			if(!isset($finished))
-				$finished = -1;
+			if(!isset($values['parent']))
+				$values['parent'] = 0;
+			if(!isset($values['position']))
+				$values['position'] = 0;
+			if(!isset($values['text']))
+				$values['text'] = '';
+			if(!isset($values['finished']))
+				$values['finished'] = -1;
 	
 			// Running query against database
-			// TODO: run against database
+			mysql_query("INSERT INTO `tasks`
+					(
+						`id` ,
+						`text` ,
+						`parent` ,
+						`position` ,
+						`finished`
+					)
+					VALUES (
+						NULL , 
+						'".$values['text']."', 
+						'".$values['parent']."', 
+						'".$values['position']."', 
+						'".$values['finished']."'
+					);
+				");
 	
-			$id = time();
+			$values['id'] = mysql_insert_id();
 			echo
 				'created,'. // status
-				'id:'.$id.','. // id
-				'parent:'.$parent.','. // parent
-				'position:'.$position.','. // position
-				'text:"'.$text.'",'. // text
-				'finished:'.$finished; // finished
+				'id:'.$values['id'].','. // id
+				'parent:'.$values['parent'].','. // parent
+				'position:'.$values['position'].','. // position
+				'text:"'.$values['text'].'",'. // text
+				'finished:'.$values['finished']; // finished
 		}
 		elseif(!$error && $split[0] == 'update')
 		{
-			// TODO: remove:
-			if(!isset($parent))
-				$parent = 0;
-			if(!isset($position))
-				$position = 0;
-			
-			// Detect changes
-			// TODO: detect changes
-	
-			// TODO: run against database
-	
-			// TODO: only return updated rows
-			echo
-				'updated,'. // status
-				'id:'.$id.','. // id
-				'parent:'.$parent.','. // parent
-				'position:'.$position; // position
+			if(!isset($values['id']))
+			{
+				echo 'Lineerror 4 - No ID set.';
+			}
+			elseif(!count($values) > 1)
+			{
+				echo 'Lineerror 5 - No changes.';
+			}
+			else
+			{
+				// Changes is in $values, building SQL
+				$sql = 'UPDATE `tasks` SET ';
+				$i = 0;
+				foreach($values as $key => $value)
+				{
+					$sql .= '`'.$key.'` = \''.$value.'\'';
+					$i++;
+					if($i < count($values))
+						$sql .= ', ';
+				}
+				$sql .= ' WHERE `id` = '.$values['id'];
+				
+				// Running query
+				mysql_query($sql);
+				
+				// Returning status with the updated info
+				echo
+					'updated,'; // status
+				$i = 0;
+				foreach ($values as $key => $value)
+				{
+					echo $key.':'.$value;
+					$i++;
+					if($i < count($values))
+						echo ',';
+				}
+			}
 		}
 	}
 	

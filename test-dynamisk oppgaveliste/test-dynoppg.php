@@ -689,9 +689,12 @@ $(function() {
 <div class="finisheddisplay">Finisheddisplay</div><br>
 <div class="finishedvalue">Finished</div>
 <ul id="tasks">
+<?php
+/*
+Old test lines:
 	<li id="task1" style="margin-left: 40px;"><div class="sorter"></div><div class="finish notfinished"></div><div class="level">1</div><div class="id_display">1</div><div class="parent_id">0</div><div class="position">1</div><div class="finisheddisplay">0 %</div><div class="finishedvalue">-1</div><div class="task taskNotfinished" id="1" contenteditable="">Oppgave</div></li>
 	<li id="task2" style="margin-left: 40px;"><div class="sorter"></div><div class="finish notfinished"></div><div class="level">1</div><div class="id_display">2</div><div class="parent_id">0</div><div class="position">2</div><div class="finisheddisplay">0 %</div><div class="finishedvalue">-1</div><div class="task taskNotfinished" id="2" contenteditable="">Oppgave 2</div></li>
-<?php
+*/
 
 // TODO: sort the right way
 $query = mysql_query('select * from `tasks`');
@@ -709,7 +712,7 @@ while($R = mysql_fetch_assoc($query))
 		'<div class="finish notfinished"></div>'.
 		'<div class="level">'.$level.'</div>'.
 		'<div class="id_display">'.$R['id'].'</div>'.
-		'<div class="parent_id">'.$R['parent_id'].'</div>'.
+		'<div class="parent_id">'.$R['parent'].'</div>'.
 		'<div class="position">'.$R['position'].'</div>'.
 		'<div class="finisheddisplay">'.$finisheddisplay.' %</div>'.
 		'<div class="finishedvalue">'.$R['finished'].'</div>'.
