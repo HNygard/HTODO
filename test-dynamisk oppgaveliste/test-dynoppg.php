@@ -1,4 +1,8 @@
-<!doctype html>
+<?php
+
+include "mysql.php";
+
+?><!doctype html>
 <html>
   <head>
     <script type="text/javascript" src="jquery-1.4.2.min.js"></script>

@@ -20,6 +20,8 @@
  * - finished, value int, -1 to 100
  */
 
+include 'mysql.php';
+
 if(isset($_GET['queries']))
 {
 	$_POST['queries'] = $_GET['queries'];
