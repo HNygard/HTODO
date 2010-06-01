@@ -696,11 +696,37 @@ Old test lines:
 	<li id="task2" style="margin-left: 40px;"><div class="sorter"></div><div class="finish notfinished"></div><div class="level">1</div><div class="id_display">2</div><div class="parent_id">0</div><div class="position">2</div><div class="finisheddisplay">0 %</div><div class="finishedvalue">-1</div><div class="task taskNotfinished" id="2" contenteditable="">Oppgave 2</div></li>
 */
 
-// TODO: sort the right way
-$query = mysql_query('select * from `tasks`');
+$query = mysql_query('select * from `tasks` order by `position`');
+$parents = array();
+$tasks = array();
 while($R = mysql_fetch_assoc($query))
 {
-	$level = 1; // TODO: get the real level
+	if(!isset($parents[$R['parent']]))
+	{
+		$parents[$R['parent']] = array();
+	}
+	
+	$parents[$R['parent']][] = $R['id'];
+	
+	$tasks[$R['id']] = $R;
+}
+
+function print_children($id, $parent_level)
+{
+	global $parents, $tasks;
+	
+	if(isset($parents[$id]))
+	{
+		foreach ($parents[$id] as $children_id)
+		{
+			print_task($tasks[$children_id], $parent_level + 1);
+		}
+	}
+}
+
+function print_task($R, $level)
+{
+	global $tasks;
 	
 	if($R['finished'] == -1)
 		$finisheddisplay = 0;
@@ -718,10 +744,28 @@ while($R = mysql_fetch_assoc($query))
 		'<div class="finishedvalue">'.$R['finished'].'</div>'.
 		'<div class="task taskNotfinished" id="'.$R['id'].'" contenteditable="">'.$R['text'].'</div>'.
 	'</li>'.chr(10);
+	
+	// Print the children of this task
+	print_children($R['id'], $level);
+	
+	unset($tasks[$R['id']]);
 }
+
+print_children(0,0); // Start at level 1
 
 ?></ul>
 
+<?php
+
+// Printing disconnected children
+if(count($tasks))
+{
+	echo '<h1>Disconnected children: ';
+	print_r($tasks);
+	echo '</h1>';
+}
+
+?>
 <div id="dbdebug"></div>
 </body>
 </html>
