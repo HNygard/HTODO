@@ -555,13 +555,13 @@ li {
 .id_display
 {
 	background-color: pink;
-	width: 130px;
+	width: 70px;
 	float: right;
 }
 .parent_id
 {
 	background-color: lightgreen;
-	width: 130px;
+	width: 70px;
 	float: right;
 }
 .position
