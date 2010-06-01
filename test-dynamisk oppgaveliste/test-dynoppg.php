@@ -93,6 +93,7 @@ function afterDBQueries (msg)
 		new_parent_id = 0;
 		new_id = 0;
 		new_finished = -1;
+		new_text = '';
 		for(j = 0; j < innersplit.length; j++)
 		{
 			innersplit2 = innersplit[j].split(':',2);
@@ -116,6 +117,10 @@ function afterDBQueries (msg)
 			else if(innersplit2[0] == 'finished')
 			{
 				new_finished = innersplit2[1];
+			}
+			else if(innersplit2[0] == 'text')
+			{
+				new_text = innersplit2[1].substr(1, innersplit2[1].length-2);
 			}
 			else
 			{
@@ -207,7 +212,7 @@ function afterDBQueries (msg)
 					'id="'+new_id+'" '+
 					'class="task taskNotfinished" '+
 					'contenteditable=""'+
-				'>Oppgave '+new_id+'</div></li>';
+				'>'+new_text+'</div></li>';
 			
 			// Add in the right place
 			if(add_after == -1)
