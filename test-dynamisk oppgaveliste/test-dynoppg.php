@@ -249,7 +249,6 @@ function afterDBQueries (msg)
 	if(db_run_again)
 	{
 		// TODO: remove this?
-		console.log('Running again');
 		executeDBQueries(function () { });
 	}
 }
@@ -488,7 +487,7 @@ function TaskFinished(e)
 {
 	// Find current id
 	current_id = parseInt($(this).parent().children('.task').attr('id'));
-	console.log('Current: ' + current_id);
+	//console.log('Current: ' + current_id);
 	
 	if($(this).hasClass('notfinished'))
 	{
