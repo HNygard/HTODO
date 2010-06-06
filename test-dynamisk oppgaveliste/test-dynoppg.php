@@ -790,9 +790,8 @@ print_children(0,0); // Start at level 1
 // Printing disconnected children
 if(count($tasks))
 {
-	echo '<h1>Disconnected children: ';
+	echo '<h1>Disconnected children:</h1>';
 	print_r($tasks);
-	echo '</h1>';
 }
 
 ?>
