@@ -1,7 +1,5 @@
 TODO - dynoppg:
 
-- ved hver skriving, så lagres ny tekst til update
-- ved andre actions enn skriving, så execute
 - databasebackend
 	- fikse bugs som er nå i forhold til databasehåndtering
 	- samle opp oppdateringer for samme task id
