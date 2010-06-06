@@ -1,9 +1,5 @@
 TODO - dynoppg:
 
-- databasebackend
-	- fikse bugs som er nå i forhold til databasehåndtering
-	- samle opp oppdateringer for samme task id
-	- sende spørringene som 1 spørring til databasen
 - skjuling av linjer (Samme som under, men kan vises igjen)
 - knapp for skjuling av alle linjer som er ferdig
 - knapp for skjuling av linje og alle underlinjer
@@ -13,6 +9,16 @@ TODO - dynoppg:
 - dependent finished status
 	- -1 = henter fra barn, osv.. se notat
 - ved å trykke opp og ned, så står cursor (?) på samme sted
+
+- databasebackend
+	- fikse bugs som er nå i forhold til databasehåndtering
+	- samle opp oppdateringer for samme task id
+	- sende spørringene som 1 spørring til databasen
+
+- support for lister
+	- flere lister i samme html-dokument
+	- liste-endring skjer ved drag n drop
+	- database endres på samme måte som annet
 
 - out of sync-funksjon
 	- hvis man ikke er den siste som redigerte, så får man ikke redigere
