@@ -25,6 +25,7 @@ $(document).ready(function()
 	});
 });
 
+var textsavetimer = null;
 task_in_focus_before = '';
 tmp_new_task = new Array();
 db_is_running = false;
@@ -274,9 +275,6 @@ function addDBTextUpdate (this_id, new_text)
 		// Not found, adding query
 		addDBQuery ('update,id:'+this_id+',text:'+new_text);
 	}
-	
-	// Execute database queries
-	executeDBQueries(function (msg) { } );
 }
 
 function queryRunStatus(is_running)
@@ -383,6 +381,18 @@ function TaskKeyup (e)
 	else
 	{
 		$("#tester").text(e.keyCode);
+		
+		if(task_in_focus_before != $(this).text())
+		{
+			addDBTextUpdate ($(this).attr('id'), $(this).text());
+			
+			// Setting a time for five seconds
+			clearTimeout(textsavetimer);
+			textsavetimer = setTimeout(function () {
+				// Execute database queries
+				executeDBQueries(function (msg) { } );
+			}, 3000);
+		}
 	}
 }
 
@@ -403,6 +413,9 @@ function TaskFocusout ()
 	if(task_in_focus_before != $(this).text())
 	{
 		addDBTextUpdate ($(this).attr('id'), $(this).text());
+		
+		// Execute database queries
+		executeDBQueries(function (msg) { } );
 	}
 }
 
