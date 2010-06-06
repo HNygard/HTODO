@@ -1,0 +1,21 @@
+TODO - dynoppg:
+
+- ved hver skriving, så lagres ny tekst til update
+- ved andre actions enn skriving, så execute
+- databasebackend
+	- fikse bugs som er nå i forhold til databasehåndtering
+	- samle opp oppdateringer for samme task id
+	- sende spørringene som 1 spørring til databasen
+- skjuling av linjer (Samme som under, men kan vises igjen)
+- knapp for skjuling av alle linjer som er ferdig
+- knapp for skjuling av linje og alle underlinjer
+- fjerning av linjer
+	- delete mot db
+	- fjerne selve linjen & run update
+- dependent finished status
+	- -1 = henter fra barn, osv.. se notat
+- ved å trykke opp og ned, så står cursor (?) på samme sted
+
+- out of sync-funksjon
+	- hvis man ikke er den siste som redigerte, så får man ikke redigere
+	- altså passer på at andre tabs ikke redigerer i mens
