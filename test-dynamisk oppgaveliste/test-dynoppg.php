@@ -604,7 +604,7 @@ function taskUpdateHide(task_id, hidevalue)
 		$('#task'+task_id+ ' .finish').fadeOut(300);
 		$('#task'+task_id+ ' .sorter').fadeOut(300, function ()
 			{
-				$('#task'+task_id).animate({height: '5px', padding: '0px'}, 6000);
+				$('#task'+task_id).animate({height: '5px', padding: '0px'}, 300);
 			});
 		
 		// Updating database
@@ -616,7 +616,7 @@ function taskUpdateHide(task_id, hidevalue)
 		$('#task'+task_id+ ' .hiddenstatus').removeClass('hidden').addClass('nothidden');
 		// TODO: animate / show task again
 		
-		$('#task'+task_id).animate({height: '1.1em', padding: '5px'}, 5000, 
+		$('#task'+task_id).animate({height: '1.5em', padding: '5px'}, 300, 
 			function () {
 				$('#task'+task_id+ ' .task').fadeIn();
 				$('#task'+task_id+ ' .id_display').fadeIn();
@@ -867,24 +867,28 @@ function print_task($R, $level)
 	
 	if($R['hidden'] == '1')
 	{
-		$hiddenstatus = 'hidden';
+		$hiddenstatus    = 'hidden';
+		$task_css_style  = ' height: 5px; display: list-item; padding: 0px;';
+		$div_css_style   = ' style="display:none;"';
 	}
 	else
 	{
-		$hiddenstatus = 'nothidden';
+		$hiddenstatus    = 'nothidden';
+		$task_css_style  = '';
+		$div_css_style   = '';
 	}
 	
-	echo '	<li id="task'.$R['id'].'" style="margin-left: '.(40*$level).'px;">'.
-		'<div class="sorter"></div>'.
-		'<div class="finish '.$finished_class.'"></div>'.
-		'<div class="level">'.$level.'</div>'.
-		'<div class="id_display">'.$R['id'].'</div>'.
-		'<div class="parent_id">'.$R['parent'].'</div>'.
-		'<div class="position">'.$R['position'].'</div>'.
-		'<div class="finisheddisplay">'.$finisheddisplay.' %</div>'.
+	echo '	<li id="task'.$R['id'].'" style="margin-left: '.(40*$level).'px;'.$task_css_style.'">'.
+		'<div class="sorter"'.$div_css_style.'></div>'.
+		'<div class="finish '.$finished_class.'"'.$div_css_style.'></div>'.
+		'<div class="level"'.$div_css_style.'>'.$level.'</div>'.
+		'<div class="id_display"'.$div_css_style.'>'.$R['id'].'</div>'.
+		'<div class="parent_id"'.$div_css_style.'>'.$R['parent'].'</div>'.
+		'<div class="position"'.$div_css_style.'>'.$R['position'].'</div>'.
+		'<div class="finisheddisplay"'.$div_css_style.'>'.$finisheddisplay.' %</div>'.
 		'<div class="finishedvalue">'.$R['finished'].'</div>'.
 		'<div class="hiddenstatus '.$hiddenstatus.'"></div>'.
-		'<div class="task '.$task_finished_class.'" id="'.$R['id'].'" contenteditable="">'.$R['text'].'</div>'.
+		'<div class="task '.$task_finished_class.'" id="'.$R['id'].'" contenteditable=""'.$div_css_style.'>'.$R['text'].'</div>'.
 	'</li>'.chr(10);
 	
 	// Print the children of this task
