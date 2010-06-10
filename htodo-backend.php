@@ -20,7 +20,7 @@
  * - finished, value int, -1 to 100
  */
 
-include 'mysql.php';
+include 'configs/mysql.php';
 
 if(isset($_GET['queries']))
 {
