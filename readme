@@ -1,0 +1,30 @@
+HTODO - Hierarchy based to do list made with Javascript and a PHP/MySQL backend 
+
+Author: Hallvard Nygård, http://hnygard.no/
+Source code: http://github.com/HNygard/HTODO
+
+License: Creative Commons Attribution-Share Alike 3.0 Norway License, http://creativecommons.org/licenses/by-sa/3.0/no/
+
+Currently implemented with a simple PHP and MySQL backend.
+
+Features:
+- Changes will be saved to database. Text edits is saved 3 seconds after last edit or if you change the focus/selected task.
+- Press enter to make a new task below current
+- Press up and down to move between tasks
+- Press tab, or shift+tab, to indent the task. Parent task will be set accordingly
+- Drag a task with the image in front of the task. Drop it in an other position to rearrange the tasks.
+- Click on the box in front of a task to mark it as finished.
+
+MySQL-tables and needed data:
+
+CREATE TABLE IF NOT EXISTS `tasks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `text` varchar(255) NOT NULL,
+  `parent` int(10) unsigned NOT NULL,
+  `position` int(10) unsigned NOT NULL,
+  `finished` int(11) NOT NULL,
+  `hidden` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+INSERT INTO `tasks` (`id`, `text`, `parent`, `position`, `finished`, `hidden`) VALUES
+(1, 'HTODO - First task', 0, 1, -1, 0);
