@@ -159,3 +159,15 @@ html>body #tasks li
 	padding: 5px;
 	display: none;
 }
+.license
+{
+	margin: 10px;
+	margin-top: 20px;
+	vertical-align: middle;
+	color: white;
+	font-size: 0.7em;
+}
+.license A:link { color: white; }
+.license A:visited { color: white; }
+.license A:active { color: white; }
+.license A:hover { color: white; }

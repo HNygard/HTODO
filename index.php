@@ -124,5 +124,7 @@ if(count($tasks))
 
 ?>
 <div id="dbdebug"></div>
+
+<div class="license"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/no/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/no/80x15.png" /></a>&nbsp;&nbsp;<span xmlns:dc="http://purl.org/dc/elements/1.1/" property="dc:title">HTODO</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://github.com/HNygard/HTODO" property="cc:attributionName" rel="cc:attributionURL">Hallvard Nyg&#229;rd</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/no/">Creative Commons Attribution-Share Alike 3.0 Norway License</a>. Source code can be found at <a xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://github.com/HNygard/HTODO" rel="dc:source">github.com/HNygard/HTODO</a>.</div>
 </body>
 </html>
