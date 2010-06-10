@@ -5,6 +5,7 @@ include "mysql.php";
 ?><!doctype html>
 <html>
 	<head>
+		<title>HTODO - Hierarchy todo list</title>
 		<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="jquery-ui-1.8.1.custom.min.js"></script>
 		<script type="text/javascript" src="htodo.js"></script>
@@ -23,9 +24,9 @@ $(function() {
 	//$("#tasks").disableSelection();
 });
 </script>
+	</head>
+	<body>
 
-  </head>
-  <body>
 <div id="workingIcon" class="workingIcon"><img width="32" height="32" src="loading.gif"></div>
 <div id="tester"></div>
 <div class="level">Level</div><br>
