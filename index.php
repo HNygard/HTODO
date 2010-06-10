@@ -1,16 +1,16 @@
 <?php
 
-include "mysql.php";
+include "configs/mysql.php";
 
 ?><!doctype html>
 <html>
 	<head>
 		<title>HTODO - Hierarchy todo list</title>
-		<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
-		<script type="text/javascript" src="jquery-ui-1.8.1.custom.min.js"></script>
-		<script type="text/javascript" src="htodo.js"></script>
+		<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="js/jquery-ui-1.8.1.custom.min.js"></script>
+		<script type="text/javascript" src="js/htodo.js"></script>
 		<script type="text/javascript">backend_url='htodo-backend.php';</script>
-		<link rel="stylesheet" type="text/css" href="htodo.css" />
+		<link rel="stylesheet" type="text/css" href="css/htodo.css" />
 	</head>
 	<body>
 
