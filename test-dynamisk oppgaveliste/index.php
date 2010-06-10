@@ -9,6 +9,7 @@ include "mysql.php";
 		<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="jquery-ui-1.8.1.custom.min.js"></script>
 		<script type="text/javascript" src="htodo.js"></script>
+		<script type="text/javascript">backend_url='htodo-backend.php';</script>
 		<link rel="stylesheet" type="text/css" href="htodo.css" />
 	</head>
 	<body>

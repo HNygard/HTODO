@@ -66,7 +66,7 @@ function executeDBQueries (run_after)
 		
 		$.ajax({
 			type: "POST",
-			url: "test-dynoppg-phpbackend.php",
+			url: backend_url,
 			data: {queries: database_queries}, // TODO: values
 			success: afterDBQueries,
 			// TODO:
