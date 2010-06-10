@@ -1,4 +1,4 @@
-next_id = 3;
+
 $(document).ready(function()
 {
 	$(".task").keyup(TaskKeyup);
@@ -10,7 +10,15 @@ $(document).ready(function()
 	$(".hiddenstatus").click(TaskClickHidden);
 	$("#tasks li").click(TaskClickHiddenLi);
 	
-	// TODO: Trigger hide on all hidden tasks
+	$("#tasks").sortable({
+		placeholder: 'ui-state-highlight',
+		distance: 10,
+		handle: 'div.sorter',
+		update: function() {
+			updateTask ();
+			executeDBQueries(function (msg) { } );
+		}
+	});
 	
 	// Debug / temp
 	$("#dbdebug").click(function () {

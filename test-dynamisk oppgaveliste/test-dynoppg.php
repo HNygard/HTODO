@@ -10,20 +10,6 @@ include "mysql.php";
 		<script type="text/javascript" src="jquery-ui-1.8.1.custom.min.js"></script>
 		<script type="text/javascript" src="htodo.js"></script>
 		<link rel="stylesheet" type="text/css" href="htodo.css" />
-<script type="text/javascript">
-$(function() {
-	$("#tasks").sortable({
-		placeholder: 'ui-state-highlight',
-		distance: 10,
-		handle: 'div.sorter',
-		update: function() {
-			updateTask ();
-			executeDBQueries(function (msg) { } );
-		}
-	});
-	//$("#tasks").disableSelection();
-});
-</script>
 	</head>
 	<body>
 
