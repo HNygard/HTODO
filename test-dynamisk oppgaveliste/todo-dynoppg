@@ -1,5 +1,10 @@
 TODO - dynoppg:
 
+- Fikse bilder
+	- finished / not finished
+	- sorter
+	- hide / unhide
+
 - fjerning av linjer
 	- delete mot db
 	- fjerne selve linjen & run update
