@@ -1,5 +1,11 @@
+body
+{
+	background-color: black;
+}
+
 li {
- border: 1px solid black;
+	border: 1px solid white;
+	background-color: #BDBDBD;
 }
 
 .level
@@ -55,7 +61,13 @@ li {
 {
 	height: 15px;
 }
-.task { margin: 5px; padding: 5px; width: 400px;}
+.task
+{
+	margin: 5px;
+	padding: 5px;
+	width: 400px;
+	background-color: white;
+}
 
 #tasks
 {
@@ -83,6 +95,7 @@ html>body #tasks li
 }
 .sorter
 {
+	background-color: white;
 	float: left;
 	background-image:url("http://www.gstatic.com/tasks/embed-tasks-sprites9.png");
 	cursor:-moz-grab;
@@ -96,6 +109,7 @@ html>body #tasks li
 }
 .finish
 {
+	background-color: white;
 	width: 16px;
 	height: 16px;
 	-moz-user-select:none;
