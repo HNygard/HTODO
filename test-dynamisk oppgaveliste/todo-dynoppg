@@ -1,8 +1,5 @@
 TODO - dynoppg:
 
-- skjuling av linjer (Samme som under, men kan vises igjen)
-- knapp for skjuling av alle linjer som er ferdig
-- knapp for skjuling av linje og alle underlinjer
 - fjerning av linjer
 	- delete mot db
 	- fjerne selve linjen & run update

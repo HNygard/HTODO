@@ -66,6 +66,15 @@ function matchParameters($param)
 			
 			return array($split[0], $value);
 		}
+		elseif (
+			$split[0] == 'hidden'
+		)
+		{
+			if($split[1] == '1')
+				return array($split[0], '1');
+			else
+				return array($split[0], '0');
+		}
 		else
 			return array();
 	}
@@ -115,6 +124,8 @@ foreach($_POST['queries'] as $line)
 				$values['text'] = '';
 			if(!isset($values['finished']))
 				$values['finished'] = -1;
+			if(!isset($values['hidden']))
+				$values['hidden'] = '0';
 	
 			// Running query against database
 			mysql_query("INSERT INTO `tasks`
@@ -123,14 +134,16 @@ foreach($_POST['queries'] as $line)
 						`text` ,
 						`parent` ,
 						`position` ,
-						`finished`
+						`finished` ,
+						`hidden`
 					)
 					VALUES (
 						NULL , 
 						'".$values['text']."', 
 						'".$values['parent']."', 
 						'".$values['position']."', 
-						'".$values['finished']."'
+						'".$values['finished']."', 
+						'".$values['hidden']."'
 					);
 				");
 	
@@ -141,7 +154,8 @@ foreach($_POST['queries'] as $line)
 				'parent:'.$values['parent'].','. // parent
 				'position:'.$values['position'].','. // position
 				'text:"'.$values['text'].'",'. // text
-				'finished:'.$values['finished']; // finished
+				'finished:'.$values['finished'].','. // finished
+				'hidden:'.$values['hidden']; // finished
 		}
 		elseif(!$error && $split[0] == 'update')
 		{

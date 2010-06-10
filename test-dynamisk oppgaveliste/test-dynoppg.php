@@ -18,6 +18,10 @@ $(document).ready(function()
 	$(".task").focusout(TaskFocusout);
 	
 	$(".finish").click(TaskFinished);
+	$(".hiddenstatus").click(TaskClickHidden);
+	$("#tasks li").click(TaskClickHiddenLi);
+	
+	// TODO: Trigger hide on all hidden tasks
 	
 	// Debug / temp
 	$("#dbdebug").click(function () {
@@ -208,6 +212,7 @@ function afterDBQueries (msg)
 				'<div class="position">'+new_position+'</div>' +
 				'<div class="finisheddisplay">'+new_finished2+' %</div>' +
 				'<div class="finishedvalue">'+new_finished+'</div>' +
+				'<div class="hiddenstatus nothidden"></div>' +
 				'<div '+
 					// TODO: Change ID to something else
 					'id="'+new_id+'" '+
@@ -231,6 +236,8 @@ function afterDBQueries (msg)
 			$('#task'+new_id+' .task').keyup(TaskKeyup);
 			$('#task'+new_id+' .task').keypress(TaskKeypress);
 			$('#task'+new_id+' .finish').click(TaskFinished);
+			$('#task'+new_id+' .hiddenstatus').click(TaskClickHidden);
+			$('#task'+new_id).click(TaskClickHiddenLi);
 			$('#'+new_id).focus(); // TODO: change id for task edit field
 			
 			updateTask ();
@@ -550,6 +557,85 @@ function taskUpdateFinished(task_id, finishedvalue)
 	executeDBQueries(function (msg) { } );
 }
 
+function TaskClickHidden(e)
+{
+	// Find current id
+	current_id = parseInt($(this).parent().children('.task').attr('id'));
+	
+	if($(this).hasClass('nothidden'))
+	{
+		// Hide the task
+		// Using timeout to trigger the hide after "li" has registered click
+		setTimeout("taskUpdateHide("+current_id+", true)", 100);
+	}
+	else
+	{
+		// Unhide the task
+		taskUpdateHide(current_id, false);
+	}
+}
+
+function TaskClickHiddenLi(e)
+{
+	// Find current id
+	current_id = parseInt($(this).children('.task').attr('id'));
+	
+	if($(this).children('.hiddenstatus').hasClass('hidden'))
+	{
+		// Unhide the task if already hidden
+		taskUpdateHide(current_id, false);
+	}
+}
+
+function taskUpdateHide(task_id, hidevalue)
+{
+	if(hidevalue)
+	{
+		// Hide task
+		$('#task'+task_id+ ' .hiddenstatus').removeClass('nothidden').addClass('hidden');
+		// TODO: animate / hide task
+		
+		$('#task'+task_id+ ' .task').fadeOut(300);
+		$('#task'+task_id+ ' .id_display').fadeOut(300);
+		$('#task'+task_id+ ' .finisheddisplay').fadeOut(300);
+		$('#task'+task_id+ ' .position').fadeOut(300);
+		$('#task'+task_id+ ' .parent_id').fadeOut(300);
+		$('#task'+task_id+ ' .level').fadeOut(300);
+		$('#task'+task_id+ ' .finish').fadeOut(300);
+		$('#task'+task_id+ ' .sorter').fadeOut(300, function ()
+			{
+				$('#task'+task_id).animate({height: '5px', padding: '0px'}, 6000);
+			});
+		
+		// Updating database
+		addDBQuery('update,id:'+task_id+',hidden:1');
+	}
+	else
+	{
+		// Unhide task
+		$('#task'+task_id+ ' .hiddenstatus').removeClass('hidden').addClass('nothidden');
+		// TODO: animate / show task again
+		
+		$('#task'+task_id).animate({height: '1.1em', padding: '5px'}, 5000, 
+			function () {
+				$('#task'+task_id+ ' .task').fadeIn();
+				$('#task'+task_id+ ' .id_display').fadeIn();
+				$('#task'+task_id+ ' .finisheddisplay').fadeIn();
+				$('#task'+task_id+ ' .position').fadeIn();
+				$('#task'+task_id+ ' .parent_id').fadeIn();
+				$('#task'+task_id+ ' .level').fadeIn();
+				$('#task'+task_id+ ' .finish').fadeIn();
+				$('#task'+task_id+ ' .sorter').fadeIn();
+			});
+		
+		// Updating database
+		addDBQuery('update,id:'+task_id+',hidden:0');
+	}
+	
+	// Execute database queries
+	executeDBQueries(function (msg) { } );
+}
+
 </script>
 
 <style>
@@ -594,6 +680,21 @@ li {
 	width: 70px;
 	float: right;
 	display: none;
+}
+.hiddenstatus
+{
+	background-color: gray;
+	width: 15px;
+	float: right;
+}
+.hidden
+{
+	height: 5px;
+	display: none;
+}
+.nothidden
+{
+	height: 15px;
 }
 .task { margin: 5px; padding: 5px; width: 400px;}
 </style>
@@ -763,6 +864,16 @@ function print_task($R, $level)
 		$task_finished_class = 'taskNotfinished';
 		$finished_class = 'notfinished';
 	}
+	
+	if($R['hidden'] == '1')
+	{
+		$hiddenstatus = 'hidden';
+	}
+	else
+	{
+		$hiddenstatus = 'nothidden';
+	}
+	
 	echo '	<li id="task'.$R['id'].'" style="margin-left: '.(40*$level).'px;">'.
 		'<div class="sorter"></div>'.
 		'<div class="finish '.$finished_class.'"></div>'.
@@ -772,6 +883,7 @@ function print_task($R, $level)
 		'<div class="position">'.$R['position'].'</div>'.
 		'<div class="finisheddisplay">'.$finisheddisplay.' %</div>'.
 		'<div class="finishedvalue">'.$R['finished'].'</div>'.
+		'<div class="hiddenstatus '.$hiddenstatus.'"></div>'.
 		'<div class="task '.$task_finished_class.'" id="'.$R['id'].'" contenteditable="">'.$R['text'].'</div>'.
 	'</li>'.chr(10);
 	
