@@ -13,25 +13,28 @@ li {
 	background-color: lightblue;
 	width: 70px;
 	float: right;
-	#display: none;
+	display: none;
 }
 .id_display
 {
 	background-color: pink;
 	width: 70px;
 	float: right;
+	display: none;
 }
 .parent_id
 {
 	background-color: lightgreen;
 	width: 70px;
 	float: right;
+	display: none;
 }
 .position
 {
 	background-color: yellow;
 	width: 70px;
 	float: right;
+	display: none;
 }
 .finisheddisplay
 {
