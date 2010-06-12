@@ -5,12 +5,16 @@ TODO - dynoppg:
 	- sorter
 	- hide / unhide
 
+- Annen BG-farge på ferdige oppgaver
+
 - fjerning av linjer
-	- delete mot db
-	- fjerne selve linjen & run update
+	- fjerne selve linjen fra html & run update
+	- update mot db - removed = 1
+
 - dependent finished status
 	- -1 = henter fra barn, osv.. se notat
-- ved å trykke opp og ned, så står cursor (?) på samme sted
+
+- drag and drop av hele tre med oppgaver
 
 - databasebackend
 	- fikse bugs som er nå i forhold til databasehåndtering
@@ -21,6 +25,8 @@ TODO - dynoppg:
 	- flere lister i samme html-dokument
 	- liste-endring skjer ved drag n drop
 	- database endres på samme måte som annet
+
+- ved å trykke opp og ned, så står cursor (?) på samme sted
 
 - out of sync-funksjon
 	- hvis man ikke er den siste som redigerte, så får man ikke redigere
