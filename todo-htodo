@@ -7,6 +7,8 @@ TODO - dynoppg:
 
 - Annen BG-farge på ferdige oppgaver
 
+- support for , i oppgavetekst
+
 - fjerning av linjer
 	- fjerne selve linjen fra html & run update
 	- update mot db - removed = 1
