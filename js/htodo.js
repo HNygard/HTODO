@@ -50,6 +50,7 @@ function updateDBdebug ()
 		text += database_queries[i] + '<br>';
 	}
 	$('#dbdebug').text("").append(text);
+	$('#unsaved').fadeIn();
 }
 
 function executeDBQueries (run_after)
@@ -76,6 +77,8 @@ function executeDBQueries (run_after)
 		
 		// Debug:
 		$('#dbdebug').text('');
+		
+		$('#unsaved').fadeOut();
 	}
 }
 

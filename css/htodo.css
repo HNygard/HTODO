@@ -171,3 +171,18 @@ html>body #tasks li
 .license A:visited { color: white; }
 .license A:active { color: white; }
 .license A:hover { color: white; }
+#unsaved
+{
+	color:white;
+	direction:ltr;
+	font-size:0.7em;
+	left:auto;
+	padding:15px;
+	position:fixed;
+	right:0;
+	text-align:center;
+	top:0;
+	width:150px;
+	z-index:99;
+	display: none;
+}
