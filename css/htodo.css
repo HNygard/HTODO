@@ -171,6 +171,12 @@ html>body #tasks li
 .license A:visited { color: white; }
 .license A:active { color: white; }
 .license A:hover { color: white; }
+
+#dbdebug
+{
+	color: white;
+}
+
 #unsaved
 {
 	color:white;
@@ -185,4 +191,10 @@ html>body #tasks li
 	width:150px;
 	z-index:99;
 	display: none;
+}
+
+#tester
+{
+	display: none;
+	color: white;
 }

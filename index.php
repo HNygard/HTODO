@@ -16,11 +16,6 @@ include "configs/mysql.php";
 
 <div id="workingIcon" class="workingIcon"><img width="32" height="32" src="loading.gif"></div>
 <div id="tester"></div>
-<div class="level">Level</div><br>
-<div class="id_display">Id</div><br>
-<div class="parent_id">Parentid</div><br>
-<div class="finisheddisplay">Finisheddisplay</div><br>
-<div class="finishedvalue">Finished</div>
 <ul id="tasks">
 <?php
 /*
