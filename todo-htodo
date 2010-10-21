@@ -1,17 +1,19 @@
-TODO - dynoppg:
+TODO - HTODO:
+
+- fjerning av linjer
+	[X] fjerne selve linjen fra html & run update
+	[X] update mot db - removed = 1
+	[ ] Fjerning av linjer som er barn av linjen
 
 - Fikse bilder
 	- finished / not finished
 	- sorter
 	- hide / unhide
+	- remove
 
 - Annen BG-farge på ferdige oppgaver
 
 - support for , i oppgavetekst
-
-- fjerning av linjer
-	- fjerne selve linjen fra html & run update
-	- update mot db - removed = 1
 
 - dependent finished status
 	- -1 = henter fra barn, osv.. se notat
