@@ -28,3 +28,5 @@ CREATE TABLE IF NOT EXISTS `tasks` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 INSERT INTO `tasks` (`id`, `text`, `parent`, `position`, `finished`, `hidden`) VALUES
 (1, 'HTODO - First task', 0, 1, -1, 0);
+ALTER TABLE `tasks` ADD `removed` BOOLEAN NOT NULL AFTER `hidden` ,
+ADD `removed_time` INT NOT NULL AFTER `removed`;

@@ -64,6 +64,23 @@ li {
 {
 	height: 15px;
 }
+.removedstatus
+{
+	background-color: black;
+	color: red;
+	width: 20px;
+	float: right;
+	text-align: center;
+}
+.removed
+{
+	height: 5px;
+	display: none;
+}
+.notremoved
+{
+	height: 20px;
+}
 .task
 {
 	margin: 5px;

@@ -47,6 +47,15 @@ function print_task($R, $level)
 		$div_css_style   = '';
 	}
 	
+	if($R['removed'] == '1')
+	{
+		$removedstatus = 'removed';
+	}
+	else
+	{
+		$removedstatus = 'notremoved';
+	}
+	
 	echo '	<li id="task'.$R['id'].'" style="margin-left: '.(40*$level).'px;'.$task_css_style.'">'.
 		'<div class="sorter"'.$div_css_style.'></div>'.
 		'<div class="finish '.$finished_class.'"'.$div_css_style.'></div>'.
@@ -57,6 +66,7 @@ function print_task($R, $level)
 		'<div class="finisheddisplay"'.$div_css_style.'>'.$finisheddisplay.' %</div>'.
 		'<div class="finishedvalue">'.$R['finished'].'</div>'.
 		'<div class="hiddenstatus '.$hiddenstatus.'"></div>'.
+		'<div class="removedstatus '.$removedstatus.'"'.$div_css_style.'>X</div>'.
 		'<div class="task '.$task_finished_class.'" id="'.$R['id'].'" contenteditable=""'.$div_css_style.'>'.$R['text'].'</div>'.
 	'</li>'.chr(10);
 	

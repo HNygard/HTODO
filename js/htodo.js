@@ -8,6 +8,7 @@ $(document).ready(function()
 	
 	$(".finish").click(TaskFinished);
 	$(".hiddenstatus").click(TaskClickHidden);
+	$(".removedstatus").click(TaskClickRemove);
 	$("#tasks li").click(TaskClickHiddenLi);
 	
 	$("#tasks").sortable({
@@ -213,6 +214,7 @@ function afterDBQueries (msg)
 				'<div class="finisheddisplay">'+new_finished2+' %</div>' +
 				'<div class="finishedvalue">'+new_finished+'</div>' +
 				'<div class="hiddenstatus nothidden"></div>' +
+				'<div class="removedstatus notremoved">X</div>' +
 				'<div '+
 					// TODO: Change ID to something else
 					'id="'+new_id+'" '+
@@ -237,6 +239,7 @@ function afterDBQueries (msg)
 			$('#task'+new_id+' .task').keypress(TaskKeypress);
 			$('#task'+new_id+' .finish').click(TaskFinished);
 			$('#task'+new_id+' .hiddenstatus').click(TaskClickHidden);
+			$('#task'+new_id+' .removedstatus').click(TaskClickRemove);
 			$('#task'+new_id).click(TaskClickHiddenLi);
 			$('#'+new_id).focus(); // TODO: change id for task edit field
 			
@@ -606,6 +609,7 @@ function taskUpdateHide(task_id, hidevalue)
 			{
 				$('#task'+task_id).animate({height: '5px', padding: '0px'}, 300);
 			});
+		$('#task'+task_id+ ' .removedstatus').fadeOut(300);
 		
 		// Updating database
 		addDBQuery('update,id:'+task_id+',hidden:1');
@@ -626,6 +630,7 @@ function taskUpdateHide(task_id, hidevalue)
 				$('#task'+task_id+ ' .level').fadeIn();
 				$('#task'+task_id+ ' .finish').fadeIn();
 				$('#task'+task_id+ ' .sorter').fadeIn();
+				$('#task'+task_id+ ' .removedstatus').fadeIn();
 			});
 		
 		// Updating database
@@ -634,4 +639,41 @@ function taskUpdateHide(task_id, hidevalue)
 	
 	// Execute database queries
 	executeDBQueries(function (msg) { } );
+}
+
+function TaskClickRemove(e)
+{
+	// Find current id
+	current_id = parseInt($(this).parent().children('.task').attr('id'));
+	
+	if($(this).hasClass('notremoved'))
+	{
+		// Hide the task
+		// Using timeout to trigger the hide after "li" has registered click
+		setTimeout("taskUpdateRemove("+current_id+", true)", 100);
+	}
+	else
+	{
+		// Unhide the task
+		taskUpdateRemove(current_id, false);
+	}
+}
+
+function taskUpdateRemove(task_id, removevalue)
+{
+	if(removevalue)
+	{
+		// Remove task
+		$('#task'+task_id).fadeOut().remove();
+	
+		// Updating database
+		addDBQuery('update,id:'+task_id+',removed:1');
+	
+		// Execute database queries
+		executeDBQueries(function (msg) { } );
+	}
+	else
+	{
+		// TODO: unremove task
+	}
 }

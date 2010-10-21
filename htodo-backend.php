@@ -67,7 +67,8 @@ function matchParameters($param)
 			return array($split[0], $value);
 		}
 		elseif (
-			$split[0] == 'hidden'
+			$split[0] == 'hidden' ||
+			$split[0] == 'removed'
 		)
 		{
 			if($split[1] == '1')
@@ -126,7 +127,19 @@ foreach($_POST['queries'] as $line)
 				$values['finished'] = -1;
 			if(!isset($values['hidden']))
 				$values['hidden'] = '0';
-	
+			if(!isset($values['removed']))
+				$values['removed'] = '0';
+			
+			// Checking removed and setting removed_time
+			if($values['removed'] == '1')
+			{
+				$values['removed_time'] = time();
+			}
+			else
+			{
+				$values['removed_time'] = 0;
+			}
+			
 			// Running query against database
 			mysql_query("INSERT INTO `tasks`
 					(
@@ -135,7 +148,8 @@ foreach($_POST['queries'] as $line)
 						`parent` ,
 						`position` ,
 						`finished` ,
-						`hidden`
+						`hidden` ,
+						`removed`
 					)
 					VALUES (
 						NULL , 
@@ -143,7 +157,8 @@ foreach($_POST['queries'] as $line)
 						'".$values['parent']."', 
 						'".$values['position']."', 
 						'".$values['finished']."', 
-						'".$values['hidden']."'
+						'".$values['hidden']."', 
+						'".$values['removed']."'
 					);
 				");
 	
@@ -155,7 +170,8 @@ foreach($_POST['queries'] as $line)
 				'position:'.$values['position'].','. // position
 				'text:"'.$values['text'].'",'. // text
 				'finished:'.$values['finished'].','. // finished
-				'hidden:'.$values['hidden']; // finished
+				'hidden:'.$values['hidden'],','. // hidden
+				'removed:'.$values['removed'],','; // removed
 		}
 		elseif(!$error && $split[0] == 'update')
 		{
@@ -169,6 +185,15 @@ foreach($_POST['queries'] as $line)
 			}
 			else
 			{
+				// Checking removed and setting removed_time
+				if(isset($values['removed']))
+				{
+					if($values['removed'] == '1')
+						$values['removed_time'] = time();
+					else
+						$values['removed_time'] = 0;
+				}
+				
 				// Changes is in $values, building SQL
 				$sql = 'UPDATE `tasks` SET ';
 				$i = 0;
