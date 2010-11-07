@@ -17,7 +17,7 @@ $(document).ready(function()
 		handle: 'div.sorter',
 		update: function() {
 			updateTask ();
-			executeDBQueries(function (msg) { } );
+			executeDBQueries(function (msg) { } );
 		}
 	});
 	
@@ -255,7 +255,7 @@ function afterDBQueries (msg)
 		}
 	}
 	
-	executeDBQueries(function (msg) { } );
+	executeDBQueries(function (msg) { } );
 	
 	if(db_run_again)
 	{
@@ -320,7 +320,7 @@ function TaskKeyup (e)
 		// Creating task in database and getting id
 		addDBQuery('create,parent:'+parent_id+',position:'+position);
 		
-		executeDBQueries(function (msg) { });
+		executeDBQueries(function (msg) { });
 	}
 	else if (e.keyCode == 9) // Tab is pressed
 	{
@@ -339,7 +339,7 @@ function TaskKeyup (e)
 		
 		taskSetLevel(current_id, next_level);
 		
-		executeDBQueries(function (msg) { } );
+		executeDBQueries(function (msg) { } );
 	}
 	else if (e.keyCode == 38 || e.keyCode == 40) // Up or down
 	{
@@ -400,7 +400,7 @@ function TaskKeyup (e)
 			clearTimeout(textsavetimer);
 			textsavetimer = setTimeout(function () {
 				// Execute database queries
-				executeDBQueries(function (msg) { } );
+				executeDBQueries(function (msg) { } );
 			}, 3000);
 		}
 	}
@@ -425,7 +425,7 @@ function TaskFocusout ()
 		addDBTextUpdate ($(this).attr('id'), $(this).text());
 		
 		// Execute database queries
-		executeDBQueries(function (msg) { } );
+		executeDBQueries(function (msg) { } );
 	}
 }
 
@@ -557,7 +557,7 @@ function taskUpdateFinished(task_id, finishedvalue)
 	// TODO:
 	
 	// Execute database queries
-	executeDBQueries(function (msg) { } );
+	executeDBQueries(function (msg) { } );
 }
 
 function TaskClickHidden(e)
@@ -638,7 +638,7 @@ function taskUpdateHide(task_id, hidevalue)
 	}
 	
 	// Execute database queries
-	executeDBQueries(function (msg) { } );
+	executeDBQueries(function (msg) { } );
 }
 
 function TaskClickRemove(e)
@@ -671,6 +671,7 @@ function taskUpdateRemove(task_id, removevalue)
 	
 		// Execute database queries
 		executeDBQueries(function (msg) { } );
+			executeDBQueries(function (msg) { } );
 	}
 	else
 	{
