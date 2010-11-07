@@ -65,7 +65,7 @@ function print_task($R, $level)
 		'<div class="position"'.$div_css_style.'>'.$R['position'].'</div>'.
 		'<div class="finisheddisplay"'.$div_css_style.'>'.$finisheddisplay.' %</div>'.
 		'<div class="finishedvalue">'.$R['finished'].'</div>'.
-		'<div class="hiddenstatus '.$hiddenstatus.'"></div>'.
+		'<div class="hiddenstatus '.$hiddenstatus.'">-</div>'.
 		'<div class="removedstatus '.$removedstatus.'"'.$div_css_style.'>X</div>'.
 		'<div class="task '.$task_finished_class.'" id="'.$R['id'].'" contenteditable=""'.$div_css_style.'>'.$R['text'].'</div>'.
 	'</li>'.chr(10);

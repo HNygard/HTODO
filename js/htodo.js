@@ -213,7 +213,7 @@ function afterDBQueries (msg)
 				'<div class="position">'+new_position+'</div>' +
 				'<div class="finisheddisplay">'+new_finished2+' %</div>' +
 				'<div class="finishedvalue">'+new_finished+'</div>' +
-				'<div class="hiddenstatus nothidden"></div>' +
+				'<div class="hiddenstatus nothidden">-</div>' +
 				'<div class="removedstatus notremoved">X</div>' +
 				'<div '+
 					// TODO: Change ID to something else

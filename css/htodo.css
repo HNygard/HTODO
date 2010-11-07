@@ -52,8 +52,9 @@ li {
 .hiddenstatus
 {
 	background-color: gray;
-	width: 15px;
+	width: 1em;
 	float: right;
+	text-align:center;
 }
 .hidden
 {
@@ -62,7 +63,7 @@ li {
 }
 .nothidden
 {
-	height: 15px;
+	height: 1em;
 }
 .removedstatus
 {
