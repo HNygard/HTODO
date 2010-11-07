@@ -8,6 +8,7 @@ License: Creative Commons Attribution-Share Alike 3.0 Norway License, http://cre
 Currently implemented with a simple PHP and MySQL backend.
 
 Features:
+- Automaticly saving tasks after 3 seconds
 - Changes will be saved to database. Text edits is saved 3 seconds after last edit or if you change the focus/selected task.
 - Press enter to make a new task below current
 - Press up and down to move between tasks
