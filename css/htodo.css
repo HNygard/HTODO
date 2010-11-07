@@ -72,6 +72,7 @@ li {
 	width: 20px;
 	float: right;
 	text-align: center;
+	display: none;
 }
 .removed
 {

@@ -623,14 +623,14 @@ function taskUpdateHide(task_id, hidevalue)
 		$('#task'+task_id).animate({height: '1.5em', padding: '5px'}, 300, 
 			function () {
 				$('#task'+task_id+ ' .task').fadeIn();
-				$('#task'+task_id+ ' .id_display').fadeIn();
+				//$('#task'+task_id+ ' .id_display').fadeIn();
 				$('#task'+task_id+ ' .finisheddisplay').fadeIn();
-				$('#task'+task_id+ ' .position').fadeIn();
-				$('#task'+task_id+ ' .parent_id').fadeIn();
-				$('#task'+task_id+ ' .level').fadeIn();
+				//$('#task'+task_id+ ' .position').fadeIn();
+				//$('#task'+task_id+ ' .parent_id').fadeIn();
+				//$('#task'+task_id+ ' .level').fadeIn();
 				$('#task'+task_id+ ' .finish').fadeIn();
 				$('#task'+task_id+ ' .sorter').fadeIn();
-				$('#task'+task_id+ ' .removedstatus').fadeIn();
+				//$('#task'+task_id+ ' .removedstatus').fadeIn();
 			});
 		
 		// Updating database
