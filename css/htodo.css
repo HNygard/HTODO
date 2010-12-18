@@ -72,7 +72,7 @@ li {
 	width: 20px;
 	float: right;
 	text-align: center;
-	display: none;
+	/*display: none;*/
 }
 .removed
 {

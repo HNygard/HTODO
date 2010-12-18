@@ -630,7 +630,7 @@ function taskUpdateHide(task_id, hidevalue)
 				//$('#task'+task_id+ ' .level').fadeIn();
 				$('#task'+task_id+ ' .finish').fadeIn();
 				$('#task'+task_id+ ' .sorter').fadeIn();
-				//$('#task'+task_id+ ' .removedstatus').fadeIn();
+				$('#task'+task_id+ ' .removedstatus').fadeIn();
 			});
 		
 		// Updating database
@@ -650,28 +650,50 @@ function TaskClickRemove(e)
 	{
 		// Hide the task
 		// Using timeout to trigger the hide after "li" has registered click
-		setTimeout("taskUpdateRemove("+current_id+", true)", 100);
+		setTimeout("taskUpdateRemove("+current_id+", true, true)", 100);
 	}
 	else
 	{
 		// Unhide the task
-		taskUpdateRemove(current_id, false);
+		taskUpdateRemove(current_id, false, true);
 	}
 }
 
-function taskUpdateRemove(task_id, removevalue)
+function taskUpdateRemove(task_remove_id, removevalue, execute_db_remove)
 {
 	if(removevalue)
 	{
 		// Remove task
-		$('#task'+task_id).fadeOut().remove();
+		$('#task'+task_remove_id).fadeOut().remove();
 	
 		// Updating database
-		addDBQuery('update,id:'+task_id+',removed:1');
-	
+		addDBQuery('update,id:'+task_remove_id+',removed:1');
+		
+		// Removing children also
+		$('#tasks li').each(function()
+		{
+			this_parent_id = 0;
+			$.each($(this).children('.parent_id'), function () {
+				this_parent_id = parseInt($(this).text());
+			});
+			
+			// Checking if parent is the removed task
+			if(this_parent_id == task_remove_id)
+			{
+				// Getting id of child
+				this_id = 0;
+				$.each($(this).children('.task'), function () {
+					this_id = parseInt($(this).attr('id'));
+				});
+				taskUpdateRemove(this_id, true, false); // Running remove on children
+			}
+		});
+		
 		// Execute database queries
-		executeDBQueries(function (msg) { } );
+		if(execute_db_remove)
+		{
 			executeDBQueries(function (msg) { } );
+		}
 	}
 	else
 	{
